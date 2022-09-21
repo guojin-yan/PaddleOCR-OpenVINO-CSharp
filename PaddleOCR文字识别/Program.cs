@@ -130,22 +130,37 @@ namespace OpenVinoSharpPaddleOCR
                 //*******************3.6 处理文字内容识别结果****************//
                 string text = process_rec_result(result_rec, text_size, dicts);
                 texts[epoch] = text;
-                Console.WriteLine(text);
 
             }
 
 
+            // 将识别文字放在画布上
+            Mat text_mark = new Mat(640,640,MatType.CV_8UC3,new Scalar(225,225,225));
+            text_mark = PutText.put_text(text_mark, text_rects, texts);
+            Cv2.ImShow("text_mark", text_mark);
 
-            Mat final_image = new Mat(640,640,MatType.CV_8UC3,new Scalar(225,225,225));
-            final_image = PutText.put_text(final_image, text_rects, texts);
-
+            // 拼接文字区域识别结果和文字内容识别结果
+            Mat final_image = new Mat(640, 1280, MatType.CV_8UC3);
+            Rect roi_image_rect = new Rect(0, 0, 640, 640);
+            Rect roi_text_mark = new Rect(640, 0, 640, 640);
+            image_rect.CopyTo(new Mat(final_image, roi_image_rect));
+            text_mark.CopyTo(new Mat(final_image, roi_text_mark));
             Cv2.ImShow("final_image", final_image);
 
-            Console.WriteLine(12);
+            // 保存到本地
+            string result_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\infer_result\" + 
+                Path.GetFileNameWithoutExtension(image_path) + "_infer_result.jpg";
+            Cv2.ImWrite(result_path, final_image);
             Cv2.WaitKey(0);
         }
 
 
+
+        /// <summary>
+        /// 获取文字区域的矩形框信息
+        /// </summary>
+        /// <param name="source_image">图片</param>
+        /// <returns></returns>
         public static Rect[] find_rect(Mat source_image)
         {
             Mat image = source_image.Clone();
@@ -167,12 +182,16 @@ namespace OpenVinoSharpPaddleOCR
             {
                 Rect rect = Cv2.BoundingRect(contours[i]);
                 rect = enlarge_rect(rect);
-                Console.WriteLine(rect);
                 rects[i] = rect;
             }
             return rects;
         }
 
+        /// <summary>
+        /// 扩充矩形框
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
         public static Rect enlarge_rect(Rect rect)
         {
             Rect rect_temp = new Rect();
@@ -228,6 +247,12 @@ namespace OpenVinoSharpPaddleOCR
             return rect_temp;
         }
 
+        /// <summary>
+        /// 裁剪文字区域
+        /// </summary>
+        /// <param name="source_image">原图片</param>
+        /// <param name="rects">矩形区域数组</param>
+        /// <returns></returns>
         public static Mat[] cut_image_roi(Mat source_image, Rect[] rects)
         {
             Mat image = source_image.Clone();
@@ -242,6 +267,11 @@ namespace OpenVinoSharpPaddleOCR
 
         }
 
+        /// <summary>
+        /// 读取本地字典
+        /// </summary>
+        /// <param name="dict_path"></param>
+        /// <returns></returns>
         public static List<string> read_dict(string dict_path)
         {
             List<string> list = new List<string>();
@@ -257,7 +287,11 @@ namespace OpenVinoSharpPaddleOCR
             }
             return list;
         }
-
+        /// <summary>
+        /// 调整文字识别图片大小
+        /// </summary>
+        /// <param name="source_image"></param>
+        /// <returns></returns>
         public static Mat adjust_image_size(Mat source_image)
         {
             if (source_image.Width * 1.5 < source_image.Height) 
@@ -281,7 +315,13 @@ namespace OpenVinoSharpPaddleOCR
             Cv2.Resize(source_image, source_image, new Size(img_W, img_H));
             return source_image;
         }
-
+        /// <summary>
+        /// 处理文字内容识别结果
+        /// </summary>
+        /// <param name="result">结果数据</param>
+        /// <param name="text_size">可识别字符长度</param>
+        /// <param name="dict">字典</param>
+        /// <returns></returns>
         public static string process_rec_result(float[] result, int text_size, List<string> dict)
         {
             float[] confindences = new float[text_size];
@@ -319,6 +359,12 @@ namespace OpenVinoSharpPaddleOCR
             }
             return String.Join("", list.ToArray());
         }
+        /// <summary>
+        /// 获取最大值和其索引值
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static float max_index(float[] data, ref int index) 
         {
             float temp = data[0];
