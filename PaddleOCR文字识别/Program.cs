@@ -8,7 +8,7 @@ namespace OpenVinoSharpPaddleOCR
         static void Main(string[] args)
         {
             // 测试图片路径
-            string image_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\image\demo_1.jpg";
+            string image_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\image\demo_3.jpg";
             Mat image = Cv2.ImRead(image_path);
             Cv2.ImShow("image", image);
 
@@ -18,14 +18,13 @@ namespace OpenVinoSharpPaddleOCR
 
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
-            // paddle
-            // IR
-            // 模型路径
-            string model_file_path_det = @"D:\model\det_server_paddle\inference.pdmodel";
-            // 模型输入节点
-            string input_node_name_det = "x";
-            // 模型输出节点
-            string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+            //// paddle
+            //// 模型路径
+            //string model_file_path_det = @"D:\model\det_server_paddle\inference.pdmodel";
+            //// 模型输入节点
+            //string input_node_name_det = "x";
+            //// 模型输出节点
+            //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
 
             //// ONNX
             //// 模型路径
@@ -35,13 +34,13 @@ namespace OpenVinoSharpPaddleOCR
             //// 模型输出节点
             //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
 
-            //// IR
-            //// 模型路径
-            //string model_file_path_det = @"D:\model\det_server_ir\model.xml";
-            //// 模型输入节点
-            //string input_node_name_det = "x";
-            //// 模型输出节点
-            //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+            // IR
+            // 模型路径
+            string model_file_path_det = @"D:\model\det_server_ir\model.xml";
+            // 模型输入节点
+            string input_node_name_det = "x";
+            // 模型输出节点
+            string output_node_name_det = "save_infer_model/scale_0.tmp_1";
 
 
             // 设备名
@@ -82,7 +81,7 @@ namespace OpenVinoSharpPaddleOCR
             // 重构结果图像
             Mat image_det = new Mat(640, 640, MatType.CV_8UC1, result_det_byte);
             Cv2.ImShow("image_det", image_det);
-            // 查找文字区域狂
+            // 查找文字区域框
             Rect[] text_rects = find_rect(image_det);
 
             Mat image_rect = image.Clone();
@@ -90,7 +89,6 @@ namespace OpenVinoSharpPaddleOCR
             //裁剪文字区域
             Mat[] text_images = cut_image_roi(image_rect, text_rects);
             // 将文字区域标注出来
-
             for (int r = 0; r < text_rects.Length; r++)
             {
                 Cv2.Rectangle(image_rect, text_rects[r], new Scalar(0, 0, 255), 2);
@@ -111,7 +109,7 @@ namespace OpenVinoSharpPaddleOCR
             //// 模型输出节点
             //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
 
-            // ONNX
+            //// ONNX
             //// 模型路径
             //string model_file_path_rec = @"D:\model\rec_server_onnx\model.onnx";
             //// 模型输入节点
@@ -119,14 +117,14 @@ namespace OpenVinoSharpPaddleOCR
             //// 模型输出节点
             //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
 
-            ////IR
-            //// 模型相关参数
-            //// 模型路径
-            //string model_file_path_rec = @"D:\model\rec_server_ir\model.xml";
-            //// 模型输入节点
-            //string input_node_name_rec = "x";
-            //// 模型输出节点
-            //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+            //IR
+            // 模型相关参数
+            // 模型路径
+            string model_file_path_rec = @"D:\model\rec_server_ir\model.xml";
+            // 模型输入节点
+            string input_node_name_rec = "x";
+            // 模型输出节点
+            string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
 
             // 字符字典
             string dict_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\model\ppocr_keys_v1.txt";
@@ -141,8 +139,7 @@ namespace OpenVinoSharpPaddleOCR
             string[] texts = new string[text_images.Length]; 
             for (int epoch = 0; epoch < text_images.Length; epoch++)
             {
-                Console.WriteLine(epoch);
-
+                
                 //*****************3.1 调整推理图片形状**************//
                 Mat text_image = text_images[epoch].Clone();
                 text_image = adjust_image_size(text_image);
@@ -171,6 +168,7 @@ namespace OpenVinoSharpPaddleOCR
                 //*******************3.6 处理文字内容识别结果****************//
                 string text = process_rec_result(result_rec, text_size, dicts);
                 texts[epoch] = text;
+                Console.WriteLine(text);
 
             }
 
@@ -201,28 +199,28 @@ namespace OpenVinoSharpPaddleOCR
         /// 获取文字区域的矩形框信息
         /// </summary>
         /// <param name="source_image">图片</param>
-        /// <returns></returns>
+        /// <returns>矩形框</returns>
         public static Rect[] find_rect(Mat source_image)
         {
             Mat image = source_image.Clone();
-            //中值滤波或腐蚀去除噪点
+            //中值滤波或腐蚀去除很小的点
             Cv2.MedianBlur(image, image, 3);
             Mat element = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(1, 1), new Point(-1, -1));
             Cv2.Erode(image, image, element, new Point(-1, -1), 1, BorderTypes.Default, new Scalar());
-            //Cv2.ImShow("erode", diff);
             Mat element2 = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(2, 2), new Point(-1, -1));
             Cv2.Dilate(image, image, element2, new Point(-1, -1), 1, BorderTypes.Default, new Scalar());
-            //Cv2.ImShow("dilate", diff);
 
             Point[][] contours;
             HierarchyIndex[] hierarchy; //轮廓拓扑结构变量
-            Cv2.FindContours(image, out contours, out hierarchy, RetrievalModes.External, ContourApproximationModes.ApproxNone);
+            Cv2.FindContours(image, out contours, out hierarchy, RetrievalModes.External, 
+                ContourApproximationModes.ApproxNone);
 
             Rect[] rects = new Rect[contours.Length];
             for (int i = 0; i < contours.Length; i++)
             {
                 Rect rect = Cv2.BoundingRect(contours[i]);
                 rect = enlarge_rect(rect);
+                Console.WriteLine(rect);
                 rects[i] = rect;
             }
             return rects;
@@ -244,11 +242,11 @@ namespace OpenVinoSharpPaddleOCR
             {
                 if (rect.Width < 80)
                 {
-                    width = (int)((double)rect.Width * 1.5);
+                    width = (int)((double)rect.Width * 1.6);
                 }
                 else
                 {
-                    width = (int)((double)rect.Width * 1.1);
+                    width = (int)((double)rect.Width * 1.15);
                 }
                 height = (int)((double)rect.Height * 3);
             }
@@ -272,7 +270,7 @@ namespace OpenVinoSharpPaddleOCR
             }
             if (point.X + width / 2 > 640)
             {
-                width = width - (640 - point.X - width / 2) * 2;
+                width = width + (640 - point.X - width / 2) * 2;
             }
             if (point.Y - height / 2 < 0)
             {
@@ -280,10 +278,10 @@ namespace OpenVinoSharpPaddleOCR
             }
             if (point.Y + height / 2 > 640)
             {
-                height = height - (640 - point.Y - height / 2) * 2;
+                height = height + (640 - point.Y - height / 2) * 2;
             }
 
-            rect_temp = new Rect(point.X - width / 2 + 1, point.Y - height / 2 - 1, width - 2, height - 2);
+            rect_temp = new Rect(point.X - width / 2 + 1, point.Y - height / 2 + 1, width - 2, height - 2);
 
             return rect_temp;
         }
@@ -293,7 +291,7 @@ namespace OpenVinoSharpPaddleOCR
         /// </summary>
         /// <param name="source_image">原图片</param>
         /// <param name="rects">矩形区域数组</param>
-        /// <returns></returns>
+        /// <returns>文字区域mat</returns>
         public static Mat[] cut_image_roi(Mat source_image, Rect[] rects)
         {
             Mat image = source_image.Clone();
@@ -335,24 +333,25 @@ namespace OpenVinoSharpPaddleOCR
         /// <returns></returns>
         public static Mat adjust_image_size(Mat source_image)
         {
-            if (source_image.Width * 1.5 < source_image.Height) 
+            if (source_image.Width * 2 < source_image.Height) 
             {
                 Cv2.Transpose(source_image, source_image);
                 Cv2.Flip(source_image, source_image, 0);
             }
             int img_W = source_image.Width;
             int img_H = 32;
-            double scale_size = (double)img_W / (double)source_image.Height;
+            double scale_size = ((double)img_W*1.00) / (double)source_image.Height;
 
-            int max_W = (int)scale_size * 32;
+            int max_W = (int)(scale_size * 32);
             if (scale_size * img_H > max_W)
             {
                 img_W = max_W;
             }
             else
             {
-                img_W = (int)scale_size * img_H;
+                img_W = (int)(scale_size * img_H);
             }
+
             Cv2.Resize(source_image, source_image, new Size(img_W, img_H));
             return source_image;
         }
@@ -367,6 +366,7 @@ namespace OpenVinoSharpPaddleOCR
         {
             float[] confindences = new float[text_size];
             int[] indexs = new int[text_size];
+            int num = 0;
             for (int r = 0; r < text_size; r++)
             {
                 float[] temp = new float[6625];
@@ -376,25 +376,26 @@ namespace OpenVinoSharpPaddleOCR
                 }
                 int index = 1;
                 float max = max_index(temp, ref index);
-                indexs[r] = index;
-                confindences[r] = max;
+                if (index > 1 && index < 6624) {
+                    indexs[num] = index;
+                    confindences[num] = max;
+                    num++;
+                }
+
             }
             float aver_confindence = confindences.Average();
             List<string> list = new List<string>();
-            for (int r = 0; r < text_size; r++)
+            for (int r = 0; r < num; r++)
             {
-                if (indexs[r] > 1 && indexs[r] < 6624)
+                if (text_size < 20 && confindences[r] > 0)
                 {
-                    if (text_size < 20 && confindences[r] > 0)
+                    list.Add(dict[indexs[r] - 1]);
+                }
+                else
+                {
+                    if (confindences[r] > aver_confindence - 0.2)
                     {
                         list.Add(dict[indexs[r] - 1]);
-                    }
-                    else
-                    {
-                        if (confindences[r] > aver_confindence - 0.2)
-                        {
-                            list.Add(dict[indexs[r] - 1]);
-                        }
                     }
                 }
             }
