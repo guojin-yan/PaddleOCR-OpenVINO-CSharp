@@ -104,6 +104,7 @@ namespace OpenVinoSharpPaddleOCR
                 //*****************3.1 调整推理图片形状**************//
                 Mat text_image = text_images[epoch].Clone();
                 text_image = adjust_image_size(text_image);
+                Cv2.ImShow("text_image", text_image);
 
                 //*****************3.2 设置模型输入节点形状**************//
                 ulong[] input_size_rec = new ulong[] { 1, 3, (ulong)text_image.Height, (ulong)text_image.Width };
@@ -111,12 +112,12 @@ namespace OpenVinoSharpPaddleOCR
 
                 //*****************3.3 加载模型推数据**************//
                 // 设置输入数据
-                byte[] image_data_rec = new byte[2048 * 2048 * 3];
+                byte[] image_data_rec = new byte[500 * 200 * 3];
                 ulong image_size_rec = new ulong();
                 image_data_rec = text_image.ImEncode(".bmp");
                 image_size_rec = Convert.ToUInt64(image_data_rec.Length);
                 // 将图片数据加载到模型
-                pridector_det.load_input_data(input_node_name_rec, image_data_rec, image_size_rec, 0);
+                pridector_rec.load_input_data(input_node_name_rec, image_data_rec, image_size_rec, 1);
 
                 //*******************3.4.模型推理****************//
                 // 模型推理
@@ -220,11 +221,12 @@ namespace OpenVinoSharpPaddleOCR
 
         public static Mat[] cut_image_roi(Mat source_image, Rect[] rects)
         {
+            Mat image = source_image.Clone();
             Mat[] rois = new Mat[rects.Length];
 
             for (int r = 0; r < rects.Length; r++)
             {
-                Mat roi = new Mat(source_image, rects[r]);
+                Mat roi = new Mat(image, rects[r]);
                 rois[r] = roi;
             }
             return rois;
@@ -249,6 +251,11 @@ namespace OpenVinoSharpPaddleOCR
 
         public static Mat adjust_image_size(Mat source_image)
         {
+            if (source_image.Width * 1.5 < source_image.Height) 
+            {
+                Cv2.Transpose(source_image, source_image);
+                Cv2.Flip(source_image, source_image, 0);
+            }
             int img_W = source_image.Width;
             int img_H = 32;
             double scale_size = (double)img_W / (double)source_image.Height;
@@ -275,9 +282,9 @@ namespace OpenVinoSharpPaddleOCR
                 float[] temp = new float[6625];
                 for (int j = 0; j < 6625; j++)
                 {
-                    temp[j] = result[r + 6625 + j];
+                    temp[j] = result[r * 6625 + j];
                 }
-                int index = 0;
+                int index = 1;
                 float max = max_index(temp, ref index);
                 indexs[r] = index;
                 confindences[r] = max;
@@ -286,15 +293,18 @@ namespace OpenVinoSharpPaddleOCR
             List<string> list = new List<string>();
             for (int r = 0; r < text_size; r++)
             {
-                if (text_size < 20 && confindences[r] > 0)
+                if (indexs[r] > 1 && indexs[r] < 6624)
                 {
-                    list.Add(dict[indexs[r] - 1]);
-                }
-                else 
-                {
-                    if (confindences[r] > aver_confindence - 0.5) 
+                    if (text_size < 20 && confindences[r] > 0)
                     {
                         list.Add(dict[indexs[r] - 1]);
+                    }
+                    else
+                    {
+                        if (confindences[r] > aver_confindence - 0.2)
+                        {
+                            list.Add(dict[indexs[r] - 1]);
+                        }
                     }
                 }
             }
@@ -305,7 +315,7 @@ namespace OpenVinoSharpPaddleOCR
             float temp = data[0];
             for (int i = 0; i < data.Length; i++) 
             {
-                if (temp > data[i]) { 
+                if (temp < data[i]) { 
                     index = i;
                     temp = data[i];
                 }
