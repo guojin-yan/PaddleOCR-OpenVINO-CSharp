@@ -18,15 +18,36 @@ namespace OpenVinoSharpPaddleOCR
 
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
+            // paddle
+            // IR
             // 模型路径
-            string model_file_path_det = @"D:\model\det_server_onnx\model.onnx";
-            // 设备名
-            string device_name = "CPU";
-
+            string model_file_path_det = @"D:\model\det_server_paddle\inference.pdmodel";
             // 模型输入节点
             string input_node_name_det = "x";
             // 模型输出节点
             string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+
+            //// ONNX
+            //// 模型路径
+            //string model_file_path_det = @"D:\model\det_server_onnx\model.onnx";
+            //// 模型输入节点
+            //string input_node_name_det = "x";
+            //// 模型输出节点
+            //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+
+            //// IR
+            //// 模型路径
+            //string model_file_path_det = @"D:\model\det_server_ir\model.xml";
+            //// 模型输入节点
+            //string input_node_name_det = "x";
+            //// 模型输出节点
+            //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+
+
+            // 设备名
+            string device_name = "CPU";
+
+
 
             //*******************2.初始化推理核心****************//
             Core pridector_det = new Core(model_file_path_det, device_name);
@@ -81,13 +102,32 @@ namespace OpenVinoSharpPaddleOCR
             Console.WriteLine("//------------------------------二、文字内容识别-----------------------//");
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
-            // 模型路径
-            string model_file_path_rec = @"D:\model\rec_server_onnx\model.onnx";
+            ////Paddle 暂不能用
+            //// 模型相关参数
+            //// 模型路径
+            //string model_file_path_rec = @"D:\model\rec_server_paddle\inference.pdmodel";
+            //// 模型输入节点
+            //string input_node_name_rec = "x";
+            //// 模型输出节点
+            //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
 
-            // 模型输入节点
-            string input_node_name_rec = "x";
-            // 模型输出节点
-            string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+            // ONNX
+            //// 模型路径
+            //string model_file_path_rec = @"D:\model\rec_server_onnx\model.onnx";
+            //// 模型输入节点
+            //string input_node_name_rec = "x";
+            //// 模型输出节点
+            //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+
+            ////IR
+            //// 模型相关参数
+            //// 模型路径
+            //string model_file_path_rec = @"D:\model\rec_server_ir\model.xml";
+            //// 模型输入节点
+            //string input_node_name_rec = "x";
+            //// 模型输出节点
+            //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+
             // 字符字典
             string dict_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\model\ppocr_keys_v1.txt";
 
@@ -101,6 +141,7 @@ namespace OpenVinoSharpPaddleOCR
             string[] texts = new string[text_images.Length]; 
             for (int epoch = 0; epoch < text_images.Length; epoch++)
             {
+                Console.WriteLine(epoch);
 
                 //*****************3.1 调整推理图片形状**************//
                 Mat text_image = text_images[epoch].Clone();
