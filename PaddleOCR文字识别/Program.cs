@@ -98,13 +98,13 @@ namespace OpenVinoSharpPaddleOCR
             List<string> dicts = read_dict(dict_path);
 
             //*******************3.逐张推理识别文字内容****************//
+            string[] texts = new string[text_images.Length]; 
             for (int epoch = 0; epoch < text_images.Length; epoch++)
             {
 
                 //*****************3.1 调整推理图片形状**************//
                 Mat text_image = text_images[epoch].Clone();
                 text_image = adjust_image_size(text_image);
-                Cv2.ImShow("text_image", text_image);
 
                 //*****************3.2 设置模型输入节点形状**************//
                 ulong[] input_size_rec = new ulong[] { 1, 3, (ulong)text_image.Height, (ulong)text_image.Width };
@@ -122,15 +122,24 @@ namespace OpenVinoSharpPaddleOCR
                 //*******************3.4.模型推理****************//
                 // 模型推理
                 pridector_rec.infer();
-                //*******************5.读取模型输出数据****************//
+                //*******************3.5.读取模型输出数据****************//
                 int text_size = text_image.Width / 4;
                 int result_rec_length = text_size * 6625;
                 float[] result_rec = pridector_rec.read_infer_result<float>(output_node_name_rec, result_rec_length);
 
+                //*******************3.6 处理文字内容识别结果****************//
                 string text = process_rec_result(result_rec, text_size, dicts);
+                texts[epoch] = text;
                 Console.WriteLine(text);
 
             }
+
+
+
+            Mat final_image = new Mat(640,640,MatType.CV_8UC3,new Scalar(225,225,225));
+            final_image = PutText.put_text(final_image, text_rects, texts);
+
+            Cv2.ImShow("final_image", final_image);
 
             Console.WriteLine(12);
             Cv2.WaitKey(0);
