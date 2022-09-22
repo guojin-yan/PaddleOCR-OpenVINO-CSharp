@@ -1,0 +1,4 @@
+由于模型大小超过上限，可以直接在飞桨平台下载，或在分享的百度网盘下载：
+
+链接：https://pan.baidu.com/s/1PgJCrfIeBpeto9MgxTzBkg 
+提取码：9966
