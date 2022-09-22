@@ -211,13 +211,12 @@ namespace OpenVinoSharpPaddleOCR
             DateTime time_start, time_end;
 
             //------------------------------一、文字区域识别-----------------------//
-           
+
 
             //*******************1.加载模型相关信息****************//
-
-            // IR
+            // ONNX
             // 模型路径
-            string model_file_path_det = @"D:\model\det_server_ir\model.xml";
+            string model_file_path_det = @"D:\model\det_server_onnx\model.onnx";
             // 模型输入节点
             string input_node_name_det = "x";
             // 模型输出节点
@@ -282,10 +281,10 @@ namespace OpenVinoSharpPaddleOCR
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
 
-            //IR
-            // 模型相关参数
+
+            // ONNX
             // 模型路径
-            string model_file_path_rec = @"D:\model\rec_server_ir\model.xml";
+            string model_file_path_rec = @"D:\model\rec_server_onnx\model.onnx";
             // 模型输入节点
             string input_node_name_rec = "x";
             // 模型输出节点
