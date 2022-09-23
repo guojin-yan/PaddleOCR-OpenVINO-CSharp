@@ -82,8 +82,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>OpenVinoSharp</TargetName>
-    <IncludePath>E:\OpenCV Source\opencv-4.5.5\build\include;E:\OpenCV Source\opencv-4.5.5\build\include\opencv2;C:\Program Files (x86)\Intel\openvino_2022.1.0.643\runtime\include;C:\Program Files (x86)\Intel\openvino_2022.1.0.643\runtime\include\ie;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\OpenCV Source\opencv-4.5.5\build\x64\vc15\lib;C:\Program Files (x86)\Intel\openvino_2022.1.0.643\runtime\lib\intel64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\OpenCV Source\opencv-4.5.5\build\include;E:\OpenCV Source\opencv-4.5.5\build\include\opencv2;C:\Program Files (x86)\Intel\openvino_2022.2.0.7713\runtime\include;C:\Program Files (x86)\Intel\openvino_2022.2.0.7713\runtime\include\ie;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\OpenCV Source\opencv-4.5.5\build\x64\vc15\lib;C:\Program Files (x86)\Intel\openvino_2022.2.0.7713\runtime\lib\intel64\Release;$(LibraryPath)</LibraryPath>
     <OutDir>dll\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
