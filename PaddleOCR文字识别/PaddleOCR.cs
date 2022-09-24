@@ -22,29 +22,30 @@ namespace OpenVinoSharpPaddleOCR
 
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
-            //// paddle
-            //// 模型路径
-            //string model_file_path_det = @"D:\model\det_server_paddle\inference.pdmodel";
+            // paddle
+            // 模型路径
+            //string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_paddle\inference.pdmodel";
             //// 模型输入节点
             //string input_node_name_det = "x";
             //// 模型输出节点
-            //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+            //string output_node_name_det = "sigmoid_0.tmp_0";
+
 
             //// ONNX
             //// 模型路径
-            //string model_file_path_det = @"D:\model\det_server_onnx\model.onnx";
+            //string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_onnx\model.onnx";
             //// 模型输入节点
             //string input_node_name_det = "x";
             //// 模型输出节点
-            //string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+            //string output_node_name_det = "sigmoid_0.tmp_0";
 
-            // IR
-            // 模型路径
-            string model_file_path_det = @"D:\model\det_server_ir\model.xml";
+            //// IR
+            //// 模型路径
+            string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_ir\model.xml";
             // 模型输入节点
             string input_node_name_det = "x";
             // 模型输出节点
-            string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+            string output_node_name_det = "sigmoid_0.tmp_0";
 
 
             // 设备名
@@ -105,30 +106,24 @@ namespace OpenVinoSharpPaddleOCR
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
             ////Paddle 暂不能用
+
+            ////ONNX
             //// 模型相关参数
             //// 模型路径
-            //string model_file_path_rec = @"D:\model\rec_server_paddle\inference.pdmodel";
+            //string model_file_path_rec = @"E:\Text_Model\ppocr_model_v3\rec_onnx\model.onnx";
             //// 模型输入节点
             //string input_node_name_rec = "x";
             //// 模型输出节点
-            //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
-
-            //// ONNX
-            //// 模型路径
-            //string model_file_path_rec = @"D:\model\rec_server_onnx\model.onnx";
-            //// 模型输入节点
-            //string input_node_name_rec = "x";
-            //// 模型输出节点
-            //string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+            //string output_node_name_rec = "softmax_5.tmp_0";
 
             //IR
             // 模型相关参数
             // 模型路径
-            string model_file_path_rec = @"D:\model\rec_server_ir\model.xml";
+            string model_file_path_rec = @"E:\Text_Model\ppocr_model_v3\rec_ir\model.xml";
             // 模型输入节点
             string input_node_name_rec = "x";
             // 模型输出节点
-            string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+            string output_node_name_rec = "softmax_5.tmp_0";
 
             // 字符字典
             string dict_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\model\ppocr_keys_v1.txt";
@@ -165,7 +160,7 @@ namespace OpenVinoSharpPaddleOCR
                 // 模型推理
                 pridector_rec.infer();
                 //*******************3.5.读取模型输出数据****************//
-                int text_size = text_image.Width / 4;
+                int text_size = text_image.Width / 8;
                 int result_rec_length = text_size * 6625;
                 float[] result_rec = pridector_rec.read_infer_result<float>(output_node_name_rec, result_rec_length);
 
@@ -214,13 +209,22 @@ namespace OpenVinoSharpPaddleOCR
 
 
             //*******************1.加载模型相关信息****************//
+
             // ONNX
             // 模型路径
-            string model_file_path_det = @"D:\model\det_server_onnx\model.onnx";
+            string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_onnx\model.onnx";
             // 模型输入节点
             string input_node_name_det = "x";
             // 模型输出节点
-            string output_node_name_det = "save_infer_model/scale_0.tmp_1";
+            string output_node_name_det = "sigmoid_0.tmp_0";
+
+            ////// IR
+            ////// 模型路径
+            //string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_ir\model.xml";
+            //// 模型输入节点
+            //string input_node_name_det = "x";
+            //// 模型输出节点
+            //string output_node_name_det = "sigmoid_0.tmp_0";
 
 
             // 设备名
@@ -281,14 +285,24 @@ namespace OpenVinoSharpPaddleOCR
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
 
-
-            // ONNX
+            ////ONNX
+            // 模型相关参数
             // 模型路径
-            string model_file_path_rec = @"D:\model\rec_server_onnx\model.onnx";
+            string model_file_path_rec = @"E:\Text_Model\ppocr_model_v3\rec_onnx\model.onnx";
             // 模型输入节点
             string input_node_name_rec = "x";
             // 模型输出节点
-            string output_node_name_rec = "save_infer_model/scale_0.tmp_1";
+            string output_node_name_rec = "softmax_5.tmp_0";
+
+            ////IR
+            //// 模型相关参数
+            //// 模型路径
+            //string model_file_path_rec = @"E:\Text_Model\ppocr_model_v3\rec_ir\model.xml";
+            //// 模型输入节点
+            //string input_node_name_rec = "x";
+            //// 模型输出节点
+            //string output_node_name_rec = "softmax_5.tmp_0";
+
 
             // 字符字典
             string dict_path = @"E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\model\ppocr_keys_v1.txt";
@@ -336,7 +350,7 @@ namespace OpenVinoSharpPaddleOCR
                 t7 = t7+(time_end - time_start);
                 //*******************3.5.读取模型输出数据****************//
                 time_start = DateTime.Now;
-                int text_size = text_image.Width / 4;
+                int text_size = text_image.Width / 8;
                 int result_rec_length = text_size * 6625;
                 float[] result_rec = pridector_rec.read_infer_result<float>(output_node_name_rec, result_rec_length);
 
@@ -537,8 +551,8 @@ namespace OpenVinoSharpPaddleOCR
         /// <returns></returns>
         public static string process_rec_result(float[] result, int text_size, List<string> dict)
         {
-            float[] confindences = new float[text_size];
-            int[] indexs = new int[text_size];
+            List<float> confindences = new List<float>() ;
+            List<int> indexs = new List<int>();
             int num = 0;
             for (int r = 0; r < text_size; r++)
             {
@@ -551,25 +565,39 @@ namespace OpenVinoSharpPaddleOCR
                 float max = max_index(temp, ref index);
                 if (index > 1 && index < 6624)
                 {
-                    indexs[num] = index;
-                    confindences[num] = max;
+                    indexs.Add(index);
+                    confindences.Add(max);
                     num++;
                 }
 
             }
-            float aver_confindence = confindences.Average();
             List<string> list = new List<string>();
-            for (int r = 0; r < num; r++)
-            {
-                if (text_size < 20 && confindences[r] > 0)
+            if (confindences.Count>0) {
+                float aver_confindence = confindences.Average();
+
+                for (int r = 0; r < num; r++)
                 {
-                    list.Add(dict[indexs[r] - 1]);
-                }
-                else
-                {
-                    if (confindences[r] > aver_confindence - 0.2)
+                    if (text_size < 5 && confindences[r] > 0)
                     {
                         list.Add(dict[indexs[r] - 1]);
+                    }
+                    else
+                    {
+                        if (confindences[r] > aver_confindence-0.5)
+                        {
+                            if (list.Count > 0 && list[list.Count - 1] == dict[indexs[r] - 1])
+                            {
+                                if (confindences[r] - confindences[r - 1] > 0.05 || confindences[r - 1] - confindences[r] > 0.05){}
+                                else {
+                                    list.Add(dict[indexs[r] - 1]);
+                                }
+
+                            }
+                            else {
+                                list.Add(dict[indexs[r] - 1]);
+                            }
+                            
+                        }
                     }
                 }
             }
