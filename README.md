@@ -8,7 +8,7 @@
 
 &emsp;当前新项目主要实现了文本区域识别以及文本内容识别两个步骤，由于所识别的文字都是正向。因此对文本方向未作过多的研究。下面的讲解主要围绕文本区域识别与文本内容识别展开。
 
-​                               ![image-20220922095836258](E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\doc\image\image-20220922095836258.png)
+​                               ![image-20220924134747201](E:\Git_space\基于Csharp和OpenVINO部署PaddleOCR模型\doc\image\image-20220924134747201.png)
 
  
 
@@ -18,7 +18,7 @@
 
 - 操作系统：Windows 11
 
-- OpenVINOTM：2022.1
+- OpenVINOTM：2022.2
 
 - OpenCV：4.5.5
 
