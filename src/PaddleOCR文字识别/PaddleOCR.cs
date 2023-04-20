@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenCvSharp;
+using OpenVinoSharp;
 
 namespace OpenVinoSharpPaddleOCR
 {
@@ -41,7 +42,7 @@ namespace OpenVinoSharpPaddleOCR
 
             //// IR
             //// 模型路径
-            string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_ir\model.xml";
+            string model_file_path_det = @"D:\ppocr_model_v3\det_ir\model.xml";
             // 模型输入节点
             string input_node_name_det = "x";
             // 模型输出节点
@@ -105,7 +106,7 @@ namespace OpenVinoSharpPaddleOCR
             Console.WriteLine("//------------------------------二、文字内容识别-----------------------//");
             //*******************1.加载模型相关信息****************//
             // 模型相关参数
-            ////Paddle 暂不能用
+            ////Paddle 暂不能用"D:\ppocr_model_v3"
 
             ////ONNX
             //// 模型相关参数
@@ -119,7 +120,7 @@ namespace OpenVinoSharpPaddleOCR
             //IR
             // 模型相关参数
             // 模型路径
-            string model_file_path_rec = @"E:\Text_Model\ppocr_model_v3\rec_ir\model.xml";
+            string model_file_path_rec = @"D:\ppocr_model_v3\rec_ir\model.xml";
             // 模型输入节点
             string input_node_name_rec = "x";
             // 模型输出节点
@@ -162,6 +163,7 @@ namespace OpenVinoSharpPaddleOCR
                 //*******************3.5.读取模型输出数据****************//
                 int text_size = text_image.Width / 8;
                 int result_rec_length = text_size * 6625;
+                Console.WriteLine(text_size);
                 float[] result_rec = pridector_rec.read_infer_result<float>(output_node_name_rec, result_rec_length);
 
                 //*******************3.6 处理文字内容识别结果****************//
@@ -210,9 +212,9 @@ namespace OpenVinoSharpPaddleOCR
 
             //*******************1.加载模型相关信息****************//
 
-            // ONNX
+            // ONNX""
             // 模型路径
-            string model_file_path_det = @"E:\Text_Model\ppocr_model_v3\det_onnx\model.onnx";
+            string model_file_path_det = @"D:\ppocr_model_v3\det_onnx\model.onnx";
             // 模型输入节点
             string input_node_name_det = "x";
             // 模型输出节点
@@ -288,7 +290,7 @@ namespace OpenVinoSharpPaddleOCR
             ////ONNX
             // 模型相关参数
             // 模型路径
-            string model_file_path_rec = @"E:\Text_Model\ppocr_model_v3\rec_onnx\model.onnx";
+            string model_file_path_rec = @"D:\ppocr_model_v3\rec_onnx\model.onnx";
             // 模型输入节点
             string input_node_name_rec = "x";
             // 模型输出节点
