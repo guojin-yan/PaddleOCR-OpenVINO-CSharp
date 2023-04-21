@@ -29,7 +29,7 @@ namespace paddleocr
             return x;
         }
 
-        void GetContourArea(List<List<float>> box, float unclip_ratio, float distance)
+        void GetContourArea(List<List<float>> box, float unclip_ratio, out float distance)
         {
             int pts_num = 4;
             float area = 0.0f;
@@ -43,28 +43,30 @@ namespace paddleocr
                               (box[i][1] - box[(i + 1) % pts_num][1]) *
                                   (box[i][1] - box[(i + 1) % pts_num][1]));
             }
+            
             area = Math.Abs((float)(area / 2.0));
 
             distance = area * unclip_ratio / dist;
+            
         }
 
         RotatedRect UnClip(List<List<float>> box, float unclip_ratio)
         {
-            double distance = 1.0;
+            float distance = 1.0f;
 
-            GetContourArea(box, unclip_ratio, (float)distance);
+            GetContourArea(box, unclip_ratio, out distance);
+            
 
             ClipperOffset offset = new ClipperOffset();
+
             List<IntPoint> path = new List<IntPoint> { new IntPoint((int)box[0][0], (int)box[0][1]),
             new IntPoint((int)box[1][0], (int)box[1][1]), new IntPoint((int)box[2][0], (int)box[2][1]),
             new IntPoint((int)box[3][0], (int)box[3][1])};
+
             offset.AddPath(path, JoinType.jtRound, EndType.etClosedPolygon);
             List<List<IntPoint>> paths = new List<List<IntPoint>>();
             offset.Execute(ref paths, distance);
             List<Point2f> points = new List<Point2f>();
-
-
-
 
             for (int j = 0; j < paths.Count(); j++)
             {
@@ -76,6 +78,7 @@ namespace paddleocr
             RotatedRect res;
             if (points.Count() <= 0)
             {
+                
                 res = new RotatedRect(new Point2f(0, 0), new Size2f(1, 1), 0);
             }
             else
@@ -89,8 +92,7 @@ namespace paddleocr
         List<List<int>> OrderPointsClockwise(List<List<int>> pts)
         {
             List<List<int>> box = pts;
-            box.OrderBy(t => t[0]).ToList();
-
+            box = box.OrderBy(t => t[0]).ToList();
             List<List<int>> leftmost = new List<List<int>> { box[0], box[1] };
             List<List<int>> rightmost = new List<List<int>> { box[2], box[3] };
 
@@ -122,11 +124,10 @@ namespace paddleocr
         List<List<float>> mat_to_list(Mat mat)
         {
             List<List<float>> img_vec = new List<List<float>>();
-            List<float> tmp = new List<float>();
 
             for (int i = 0; i < mat.Rows; ++i)
             {
-                tmp.Clear();
+                List<float> tmp = new List<float>();
                 for (int j = 0; j < mat.Cols; ++j)
                 {
                     tmp.Add(mat.At<float>(i, j));
@@ -144,8 +145,11 @@ namespace paddleocr
             Mat points = new Mat();
             Cv2.BoxPoints(box, points);
 
+
             var array = mat_to_list(points);
+
             array = array.OrderBy(t => t[0]).ToList();//升序
+
             List<float> idx1 = array[0], idx2 = array[1], idx3 = array[2], idx4 = array[3];
             if (array[3][1] <= array[2][1])
             {
@@ -259,24 +263,24 @@ namespace paddleocr
             Cv2.FindContours(bitmap, out contours, out hierarchy, RetrievalModes.List,
                 ContourApproximationModes.ApproxSimple);
 
-            int num_contours =
-              contours.Length >= max_candidates ? max_candidates : contours.Length;
+            int num_contours = contours.Length >= max_candidates ? max_candidates : contours.Length;
 
             List<List<List<int>>> boxes = new List<List<List<int>>>();
 
             for (int _i = 0; _i < num_contours; _i++)
             {
+  
                 if (contours[_i].Length <= 2)
                 {
                     continue;
                 }
+                
                 float ssid;
                 RotatedRect box = Cv2.MinAreaRect(contours[_i]);
                 var array = get_mini_boxes(box, out ssid);
 
                 var box_for_unclip = array;
                 // end get_mini_box
-
                 if (ssid < min_size)
                 {
                     continue;
@@ -288,12 +292,12 @@ namespace paddleocr
                     score = PolygonScoreAcc(contours[_i], pred);
                 else
                     score = BoxScoreFast(array, pred);
-
                 if (score < box_thresh)
                     continue;
 
                 // start for unclip
                 RotatedRect points = UnClip(box_for_unclip, det_db_unclip_ratio);
+                //Console.WriteLine("points.Size  {0}", points.Size);
                 if (points.Size.Height < 1.001 && points.Size.Width < 1.001)
                 {
                     continue;
@@ -302,7 +306,7 @@ namespace paddleocr
 
                 RotatedRect clipbox = points;
                 var cliparray = get_mini_boxes(clipbox, out ssid);
-
+                //Console.WriteLine("ssid  {0}", ssid);
                 if (ssid < min_size + 2)
                     continue;
 
@@ -317,10 +321,10 @@ namespace paddleocr
                     };
                     intcliparray.Add(a);
                 }
-                    
                 boxes.Add(intcliparray);
 
             } // end for
+            
             return boxes;
         }
 
@@ -329,14 +333,14 @@ namespace paddleocr
         {
             int oriimg_h = srcimg.Rows;
             int oriimg_w = srcimg.Cols;
-
             List<List<List<int>>> root_points = new List<List<List<int>>>();
             for (int n = 0; n < boxes.Count(); n++)
             {
+                boxes[n] = OrderPointsClockwise(boxes[n]);
                 for (int m = 0; m < boxes[0].Count(); m++)
                 {
-                    boxes[n][m][0] = (int)(boxes[n][m][0] / ratio_w);
-                    boxes[n][m][1] = (int)(boxes[n][m][0] / ratio_h);
+                    boxes[n][m][0] = (int)(boxes[n][m][0] / ratio_h);
+                    boxes[n][m][1] = (int)(boxes[n][m][1] / ratio_w);
 
                     boxes[n][m][0] = Math.Min(Math.Max(boxes[n][m][0], 0), oriimg_w - 1);
                     boxes[n][m][1] = Math.Min(Math.Max(boxes[n][m][1], 0), oriimg_h - 1);
