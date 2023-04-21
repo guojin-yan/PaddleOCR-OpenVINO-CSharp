@@ -1,0 +1,1 @@
+# 基于Csharp和OpenVINO部署PaddleOCR模型2.0
