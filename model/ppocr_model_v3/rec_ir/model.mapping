@@ -1,0 +1,787 @@
+<?xml version="1.0"?>
+<mapping>
+	<map>
+		<framework name="x" output_port_id="x" />
+		<IR name="x" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="batch_norm_27.tmp_3" output_port_id="batch_norm_27.tmp_3" />
+		<IR name="batch_norm_27.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9729" output_port_id="depthwise_conv2d_13.tmp_0" />
+		<IR name="Multiply_9729" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_28.tmp_3" output_port_id="batch_norm_28.tmp_3" />
+		<IR name="batch_norm_28.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_29.tmp_3" output_port_id="batch_norm_29.tmp_3" />
+		<IR name="batch_norm_29.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9749" output_port_id="depthwise_conv2d_14.tmp_0" />
+		<IR name="Multiply_9749" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_30.tmp_3" output_port_id="batch_norm_30.tmp_3" />
+		<IR name="batch_norm_30.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_31.tmp_3" output_port_id="batch_norm_31.tmp_3" />
+		<IR name="batch_norm_31.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9769" output_port_id="depthwise_conv2d_15.tmp_0" />
+		<IR name="Multiply_9769" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_32.tmp_3" output_port_id="batch_norm_32.tmp_3" />
+		<IR name="batch_norm_32.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_33.tmp_3" output_port_id="batch_norm_33.tmp_3" />
+		<IR name="batch_norm_33.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9789" output_port_id="depthwise_conv2d_16.tmp_0" />
+		<IR name="Multiply_9789" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_34.tmp_3" output_port_id="batch_norm_34.tmp_3" />
+		<IR name="batch_norm_34.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_35.tmp_3" output_port_id="batch_norm_35.tmp_3" />
+		<IR name="batch_norm_35.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9809" output_port_id="depthwise_conv2d_17.tmp_0" />
+		<IR name="Multiply_9809" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_36.tmp_3" output_port_id="batch_norm_36.tmp_3" />
+		<IR name="batch_norm_36.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_37.tmp_3" output_port_id="batch_norm_37.tmp_3" />
+		<IR name="batch_norm_37.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9829" output_port_id="depthwise_conv2d_18.tmp_0" />
+		<IR name="Multiply_9829" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_38.tmp_3" output_port_id="batch_norm_38.tmp_3" />
+		<IR name="batch_norm_38.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_39.tmp_3" output_port_id="batch_norm_39.tmp_3" />
+		<IR name="batch_norm_39.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9849" output_port_id="depthwise_conv2d_19.tmp_0" />
+		<IR name="Multiply_9849" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_40.tmp_3" output_port_id="batch_norm_40.tmp_3" />
+		<IR name="batch_norm_40.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_41.tmp_3" output_port_id="batch_norm_41.tmp_3" />
+		<IR name="batch_norm_41.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9869" output_port_id="depthwise_conv2d_20.tmp_0" />
+		<IR name="Multiply_9869" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_42.tmp_3" output_port_id="batch_norm_42.tmp_3" />
+		<IR name="batch_norm_42.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_43.tmp_3" output_port_id="batch_norm_43.tmp_3" />
+		<IR name="batch_norm_43.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9889" output_port_id="depthwise_conv2d_21.tmp_0" />
+		<IR name="Multiply_9889" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_44.tmp_3" output_port_id="batch_norm_44.tmp_3" />
+		<IR name="batch_norm_44.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_45.tmp_3" output_port_id="batch_norm_45.tmp_3" />
+		<IR name="batch_norm_45.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9909" output_port_id="depthwise_conv2d_22.tmp_0" />
+		<IR name="Multiply_9909" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_46.tmp_3" output_port_id="batch_norm_46.tmp_3" />
+		<IR name="batch_norm_46.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_47.tmp_3" output_port_id="batch_norm_47.tmp_3" />
+		<IR name="batch_norm_47.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9929" output_port_id="depthwise_conv2d_23.tmp_0" />
+		<IR name="Multiply_9929" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_48.tmp_3" output_port_id="batch_norm_48.tmp_3" />
+		<IR name="batch_norm_48.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_49.tmp_3" output_port_id="batch_norm_49.tmp_3" />
+		<IR name="batch_norm_49.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9949" output_port_id="depthwise_conv2d_24.tmp_0" />
+		<IR name="Multiply_9949" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_50.tmp_3" output_port_id="batch_norm_50.tmp_3" />
+		<IR name="batch_norm_50.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_50.tmp_4" output_port_id="batch_norm_50.tmp_4" />
+		<IR name="batch_norm_50.tmp_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="pool2d_3.tmp_0" output_port_id="pool2d_3.tmp_0" />
+		<IR name="pool2d_3.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="conv2d_61.w_0" output_port_id="conv2d_61.w_0" />
+		<IR name="conv2d_61.w_0" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_109.tmp_0" output_port_id="conv2d_109.tmp_0" />
+		<IR name="conv2d_109.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Reshape_0" output_port_id="Reshape_0" />
+		<IR name="Reshape_0" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_109.tmp_1" output_port_id="conv2d_109.tmp_1" />
+		<IR name="conv2d_109.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="relu_2.tmp_0" output_port_id="relu_2.tmp_0" />
+		<IR name="relu_2.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="conv2d_62.w_0" output_port_id="conv2d_62.w_0" />
+		<IR name="conv2d_62.w_0" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_110.tmp_0" output_port_id="conv2d_110.tmp_0" />
+		<IR name="conv2d_110.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Reshape_1" output_port_id="Reshape_1" />
+		<IR name="Reshape_1" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_110.tmp_1" output_port_id="conv2d_110.tmp_1" />
+		<IR name="conv2d_110.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="hardsigmoid_2.tmp_0" output_port_id="hardsigmoid_2.tmp_0" />
+		<IR name="hardsigmoid_2.tmp_0" output_port_id="3" />
+	</map>
+	<map>
+		<framework name="elementwise_mul_2" output_port_id="elementwise_mul_2" />
+		<IR name="elementwise_mul_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_51.tmp_3" output_port_id="batch_norm_51.tmp_3" />
+		<IR name="batch_norm_51.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Multiply_9969" output_port_id="depthwise_conv2d_25.tmp_0" />
+		<IR name="Multiply_9969" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_52.tmp_3" output_port_id="batch_norm_52.tmp_3" />
+		<IR name="batch_norm_52.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_52.tmp_4" output_port_id="batch_norm_52.tmp_4" />
+		<IR name="batch_norm_52.tmp_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="pool2d_4.tmp_0" output_port_id="pool2d_4.tmp_0" />
+		<IR name="pool2d_4.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="conv2d_65.w_0" output_port_id="conv2d_65.w_0" />
+		<IR name="conv2d_65.w_0" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_112.tmp_0" output_port_id="conv2d_112.tmp_0" />
+		<IR name="conv2d_112.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Reshape_2" output_port_id="Reshape_2" />
+		<IR name="Reshape_2" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_112.tmp_1" output_port_id="conv2d_112.tmp_1" />
+		<IR name="conv2d_112.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="relu_3.tmp_0" output_port_id="relu_3.tmp_0" />
+		<IR name="relu_3.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="conv2d_66.w_0" output_port_id="conv2d_66.w_0" />
+		<IR name="conv2d_66.w_0" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_113.tmp_0" output_port_id="conv2d_113.tmp_0" />
+		<IR name="conv2d_113.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Reshape_3" output_port_id="Reshape_3" />
+		<IR name="Reshape_3" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="conv2d_113.tmp_1" output_port_id="conv2d_113.tmp_1" />
+		<IR name="conv2d_113.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="hardsigmoid_3.tmp_0" output_port_id="hardsigmoid_3.tmp_0" />
+		<IR name="hardsigmoid_3.tmp_0" output_port_id="3" />
+	</map>
+	<map>
+		<framework name="elementwise_mul_3" output_port_id="elementwise_mul_3" />
+		<IR name="elementwise_mul_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_53.tmp_3" output_port_id="batch_norm_53.tmp_3" />
+		<IR name="batch_norm_53.tmp_3" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_53.tmp_4" output_port_id="batch_norm_53.tmp_4" />
+		<IR name="batch_norm_53.tmp_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="pool2d_5.tmp_0_clone_0" output_port_id="pool2d_5.tmp_0" />
+		<IR name="pool2d_5.tmp_0_clone_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="pool2d_5.tmp_0_clone_0" output_port_id="pool2d_5.tmp_0_clone_0" />
+		<IR name="pool2d_5.tmp_0_clone_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="batch_norm_59.tmp_2" output_port_id="batch_norm_59.tmp_2" />
+		<IR name="batch_norm_59.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="swish_21.tmp_0" output_port_id="swish_21.tmp_0" />
+		<IR name="swish_21.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="batch_norm_60.tmp_2" output_port_id="batch_norm_60.tmp_2" />
+		<IR name="batch_norm_60.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="swish_22.tmp_0" output_port_id="swish_22.tmp_0" />
+		<IR name="swish_22.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Shape_0" output_port_id="Shape_0" />
+		<IR name="Shape_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="Constant_58" output_port_id="Constant_58" />
+		<IR name="Constant_58" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_59" output_port_id="Constant_59" />
+		<IR name="Constant_59" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_0" output_port_id="Slice_0" />
+		<IR name="Slice_0" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="Constant_61" output_port_id="Constant_61" />
+		<IR name="Constant_61" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Concat_0" output_port_id="Concat_0" />
+		<IR name="Concat_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="flatten_1.tmp_0" output_port_id="flatten_1.tmp_0" />
+		<IR name="flatten_1.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_9.tmp_0" output_port_id="transpose_9.tmp_0" />
+		<IR name="transpose_9.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Div_27" output_port_id="Div_27" />
+		<IR name="Div_27" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_31" output_port_id="Mul_31" />
+		<IR name="Mul_31" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="layer_norm_15.tmp_2" output_port_id="layer_norm_15.tmp_2" />
+		<IR name="layer_norm_15.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_35.tmp_0" output_port_id="linear_35.tmp_0" />
+		<IR name="linear_35.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_35.tmp_1" output_port_id="linear_35.tmp_1" />
+		<IR name="linear_35.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_68" output_port_id="Constant_68" />
+		<IR name="Constant_68" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="reshape2_5.tmp_0" output_port_id="reshape2_5.tmp_0" />
+		<IR name="reshape2_5.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_10.tmp_0" output_port_id="transpose_10.tmp_0" />
+		<IR name="transpose_10.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_69" output_port_id="Constant_69" />
+		<IR name="Constant_69" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_70" output_port_id="Constant_70" />
+		<IR name="Constant_70" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_71" output_port_id="Constant_71" />
+		<IR name="Constant_71" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_2" output_port_id="Slice_2" />
+		<IR name="Slice_2" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="transpose_10.tmp_0_slice_0" output_port_id="transpose_10.tmp_0_slice_0" />
+		<IR name="transpose_10.tmp_0_slice_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_32" output_port_id="Mul_32" />
+		<IR name="Mul_32" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_32" output_port_id="tmp_6" />
+		<IR name="Mul_32" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_75" output_port_id="Constant_75" />
+		<IR name="Constant_75" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_76" output_port_id="Constant_76" />
+		<IR name="Constant_76" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_77" output_port_id="Constant_77" />
+		<IR name="Constant_77" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_3" output_port_id="Slice_3" />
+		<IR name="Slice_3" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="transpose_10.tmp_0_slice_1" output_port_id="transpose_10.tmp_0_slice_1" />
+		<IR name="transpose_10.tmp_0_slice_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_11.tmp_0" output_port_id="transpose_11.tmp_0" />
+		<IR name="transpose_11.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="matmul_v2_4.tmp_0" output_port_id="matmul_v2_4.tmp_0" />
+		<IR name="matmul_v2_4.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_22.tmp_0" output_port_id="softmax_3.tmp_0" />
+		<IR name="dropout_22.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_22.tmp_0" output_port_id="dropout_22.tmp_0" />
+		<IR name="dropout_22.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_79" output_port_id="Constant_79" />
+		<IR name="Constant_79" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_80" output_port_id="Constant_80" />
+		<IR name="Constant_80" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_81" output_port_id="Constant_81" />
+		<IR name="Constant_81" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_4" output_port_id="Slice_4" />
+		<IR name="Slice_4" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="transpose_10.tmp_0_slice_2" output_port_id="transpose_10.tmp_0_slice_2" />
+		<IR name="transpose_10.tmp_0_slice_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="matmul_v2_5.tmp_0" output_port_id="matmul_v2_5.tmp_0" />
+		<IR name="matmul_v2_5.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_12.tmp_0" output_port_id="transpose_12.tmp_0" />
+		<IR name="transpose_12.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_83" output_port_id="Constant_83" />
+		<IR name="Constant_83" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="reshape2_6.tmp_0" output_port_id="reshape2_6.tmp_0" />
+		<IR name="reshape2_6.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_36.tmp_0" output_port_id="linear_36.tmp_0" />
+		<IR name="linear_36.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_23.tmp_0" output_port_id="linear_36.tmp_1" />
+		<IR name="dropout_23.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_23.tmp_0" output_port_id="dropout_23.tmp_0" />
+		<IR name="dropout_23.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="tmp_7" output_port_id="tmp_7" />
+		<IR name="tmp_7" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Div_28" output_port_id="Div_28" />
+		<IR name="Div_28" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_33" output_port_id="Mul_33" />
+		<IR name="Mul_33" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="layer_norm_16.tmp_2" output_port_id="layer_norm_16.tmp_2" />
+		<IR name="layer_norm_16.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_37.tmp_0" output_port_id="linear_37.tmp_0" />
+		<IR name="linear_37.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_37.tmp_1" output_port_id="linear_37.tmp_1" />
+		<IR name="linear_37.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_24.tmp_0" output_port_id="swish_23.tmp_0" />
+		<IR name="dropout_24.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="dropout_24.tmp_0" output_port_id="dropout_24.tmp_0" />
+		<IR name="dropout_24.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="linear_38.tmp_0" output_port_id="linear_38.tmp_0" />
+		<IR name="linear_38.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_25.tmp_0" output_port_id="linear_38.tmp_1" />
+		<IR name="dropout_25.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_25.tmp_0" output_port_id="dropout_25.tmp_0" />
+		<IR name="dropout_25.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="tmp_8" output_port_id="tmp_8" />
+		<IR name="tmp_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Div_29" output_port_id="Div_29" />
+		<IR name="Div_29" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_35" output_port_id="Mul_35" />
+		<IR name="Mul_35" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="layer_norm_17.tmp_2" output_port_id="layer_norm_17.tmp_2" />
+		<IR name="layer_norm_17.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_39.tmp_0" output_port_id="linear_39.tmp_0" />
+		<IR name="linear_39.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_39.tmp_1" output_port_id="linear_39.tmp_1" />
+		<IR name="linear_39.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_96" output_port_id="Constant_96" />
+		<IR name="Constant_96" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="reshape2_7.tmp_0" output_port_id="reshape2_7.tmp_0" />
+		<IR name="reshape2_7.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_13.tmp_0" output_port_id="transpose_13.tmp_0" />
+		<IR name="transpose_13.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_97" output_port_id="Constant_97" />
+		<IR name="Constant_97" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_98" output_port_id="Constant_98" />
+		<IR name="Constant_98" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_99" output_port_id="Constant_99" />
+		<IR name="Constant_99" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_7" output_port_id="Slice_7" />
+		<IR name="Slice_7" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="transpose_13.tmp_0_slice_0" output_port_id="transpose_13.tmp_0_slice_0" />
+		<IR name="transpose_13.tmp_0_slice_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_36" output_port_id="Mul_36" />
+		<IR name="Mul_36" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_36" output_port_id="tmp_9" />
+		<IR name="Mul_36" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_103" output_port_id="Constant_103" />
+		<IR name="Constant_103" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_104" output_port_id="Constant_104" />
+		<IR name="Constant_104" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_105" output_port_id="Constant_105" />
+		<IR name="Constant_105" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_8" output_port_id="Slice_8" />
+		<IR name="Slice_8" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="transpose_13.tmp_0_slice_1" output_port_id="transpose_13.tmp_0_slice_1" />
+		<IR name="transpose_13.tmp_0_slice_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_14.tmp_0" output_port_id="transpose_14.tmp_0" />
+		<IR name="transpose_14.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="matmul_v2_6.tmp_0" output_port_id="matmul_v2_6.tmp_0" />
+		<IR name="matmul_v2_6.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_26.tmp_0" output_port_id="softmax_4.tmp_0" />
+		<IR name="dropout_26.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_26.tmp_0" output_port_id="dropout_26.tmp_0" />
+		<IR name="dropout_26.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_107" output_port_id="Constant_107" />
+		<IR name="Constant_107" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_108" output_port_id="Constant_108" />
+		<IR name="Constant_108" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Constant_109" output_port_id="Constant_109" />
+		<IR name="Constant_109" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="Slice_9" output_port_id="Slice_9" />
+		<IR name="Slice_9" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="transpose_13.tmp_0_slice_2" output_port_id="transpose_13.tmp_0_slice_2" />
+		<IR name="transpose_13.tmp_0_slice_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="matmul_v2_7.tmp_0" output_port_id="matmul_v2_7.tmp_0" />
+		<IR name="matmul_v2_7.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_15.tmp_0" output_port_id="transpose_15.tmp_0" />
+		<IR name="transpose_15.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_111" output_port_id="Constant_111" />
+		<IR name="Constant_111" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="reshape2_8.tmp_0" output_port_id="reshape2_8.tmp_0" />
+		<IR name="reshape2_8.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_40.tmp_0" output_port_id="linear_40.tmp_0" />
+		<IR name="linear_40.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_27.tmp_0" output_port_id="dropout_27.tmp_0" />
+		<IR name="dropout_27.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_27.tmp_0" output_port_id="linear_40.tmp_1" />
+		<IR name="dropout_27.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="tmp_10" output_port_id="tmp_10" />
+		<IR name="tmp_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Div_30" output_port_id="Div_30" />
+		<IR name="Div_30" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_37" output_port_id="Mul_37" />
+		<IR name="Mul_37" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="layer_norm_18.tmp_2" output_port_id="layer_norm_18.tmp_2" />
+		<IR name="layer_norm_18.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_41.tmp_0" output_port_id="linear_41.tmp_0" />
+		<IR name="linear_41.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_41.tmp_1" output_port_id="linear_41.tmp_1" />
+		<IR name="linear_41.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_28.tmp_0" output_port_id="swish_24.tmp_0" />
+		<IR name="dropout_28.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="dropout_28.tmp_0" output_port_id="dropout_28.tmp_0" />
+		<IR name="dropout_28.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="linear_42.tmp_0" output_port_id="linear_42.tmp_0" />
+		<IR name="linear_42.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_29.tmp_0" output_port_id="linear_42.tmp_1" />
+		<IR name="dropout_29.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="dropout_29.tmp_0" output_port_id="dropout_29.tmp_0" />
+		<IR name="dropout_29.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="tmp_11" output_port_id="tmp_11" />
+		<IR name="tmp_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Div_31" output_port_id="Div_31" />
+		<IR name="Div_31" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Mul_39" output_port_id="Mul_39" />
+		<IR name="Mul_39" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="layer_norm_19.tmp_2" output_port_id="layer_norm_19.tmp_2" />
+		<IR name="layer_norm_19.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="Constant_124" output_port_id="Constant_124" />
+		<IR name="Constant_124" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="reshape2_9.tmp_0" output_port_id="reshape2_9.tmp_0" />
+		<IR name="reshape2_9.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_16.tmp_0" output_port_id="transpose_16.tmp_0" />
+		<IR name="transpose_16.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_61.tmp_2" output_port_id="batch_norm_61.tmp_2" />
+		<IR name="batch_norm_61.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="swish_25.tmp_0" output_port_id="swish_25.tmp_0" />
+		<IR name="swish_25.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="concat_1.tmp_0" output_port_id="concat_1.tmp_0" />
+		<IR name="concat_1.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="batch_norm_62.tmp_2" output_port_id="batch_norm_62.tmp_2" />
+		<IR name="batch_norm_62.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="swish_26.tmp_0" output_port_id="swish_26.tmp_0" />
+		<IR name="swish_26.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="batch_norm_63.tmp_2" output_port_id="batch_norm_63.tmp_2" />
+		<IR name="batch_norm_63.tmp_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="swish_27.tmp_0" output_port_id="swish_27.tmp_0" />
+		<IR name="swish_27.tmp_0" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="squeeze_1.tmp_0" output_port_id="squeeze_1.tmp_0" />
+		<IR name="squeeze_1.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="transpose_17.tmp_0" output_port_id="transpose_17.tmp_0" />
+		<IR name="transpose_17.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_43.tmp_0" output_port_id="linear_43.tmp_0" />
+		<IR name="linear_43.tmp_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="linear_43.tmp_1" output_port_id="linear_43.tmp_1" />
+		<IR name="linear_43.tmp_1" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="softmax_5.tmp_0" output_port_id="softmax_5.tmp_0" />
+		<IR name="softmax_5.tmp_0" output_port_id="2" />
+	</map>
+</mapping>
