@@ -44,12 +44,14 @@ namespace paddleocr
             float ratio_w;
             Mat re_image = m_preprocess.ResizeImgType0(image, m_limit_type, m_limit_side_len, out ratio_h, out ratio_w);
 
-            byte[] image_data_det = new byte[2048 * 2048 * 3];
-            ulong image_size_det = new ulong();
-            image_data_det = re_image.ImEncode(".bmp");
-            image_size_det = Convert.ToUInt64(image_data_det.Length);
+            ratio_h = (float)(640.0 / image.Cols);
+            ratio_w = (float)(640.0 / image.Rows);
+
+
+            byte[] image_data_det = re_image.ImEncode(".bmp");
+            ulong image_size_det = Convert.ToUInt64(image_data_det.Length);
             // 将图片数据加载到模型
-            m_core.load_input_data(m_input_name, image_data_det, image_size_det, 0);
+            m_core.load_input_data(m_input_name, image_data_det, image_size_det, (int)m_type);
 
             //*******************4.模型推理****************//
             // 模型推理
@@ -73,11 +75,11 @@ namespace paddleocr
             // 图像阈值处理
             Mat bit_map = new Mat();
             Cv2.Threshold(cbuf_map, bit_map, threshold, maxvalue, ThresholdTypes.Binary);
-
+            Cv2.ImShow("bit_map", bit_map);
+  
             List<List<List<int>>> boxes = m_post_processor.BoxesFromBitmap(pred_map, bit_map, m_det_db_box_thresh, m_det_db_unclip_ratio,
                 m_det_db_score_mode);
-            Mat srcimg = new Mat();
-            boxes = m_post_processor.FilterTagDetRes(boxes, ratio_h, ratio_w, srcimg);
+            boxes = m_post_processor.FilterTagDetRes(boxes, ratio_h, ratio_w, image);
             return boxes;
         }
     }
