@@ -59,5 +59,48 @@ namespace paddleocr
             ratio_w = (float)(resize_w) / (float)(w);
             return resize_img;
         }
+
+        public Mat ClsResizeImg(Mat img, List<int> rec_image_shape)
+        {
+            int imgC, imgH, imgW;
+            imgC = rec_image_shape[0];
+            imgH = rec_image_shape[1];
+            imgW = rec_image_shape[2];
+
+            float ratio = (float)img.Cols / (float)img.Rows;
+            int resize_w, resize_h;
+            if (Math.Ceiling(imgH * ratio) > imgW)
+                resize_w = imgW;
+            else
+                resize_w = (int)(Math.Ceiling(imgH * ratio));
+            Mat resize_img = new Mat();
+            Cv2.Resize(img, resize_img, new Size(resize_w, imgH), 0.0f, 0.0f, InterpolationFlags.Linear);
+            return resize_img;
+        }
+
+
+        public Mat CrnnResizeImg(Mat img, float wh_ratio, int[] rec_image_shape)
+        {
+            int imgC, imgH, imgW;
+            imgC = rec_image_shape[0];
+            imgH = rec_image_shape[1];
+            imgW = rec_image_shape[2];
+
+            imgW = (int)(imgH * wh_ratio);
+
+            float ratio = (float)(img.Cols) / (float)(img.Rows);
+            int resize_w, resize_h;
+
+            if (Math.Ceiling(imgH * ratio) > imgW)
+                resize_w = imgW;
+            else
+                resize_w = (int)(Math.Ceiling(imgH * ratio));
+            Mat resize_img = new Mat();
+            Cv2.Resize(img, resize_img, new Size(resize_w, imgH), 0.0f, 0.0f, InterpolationFlags.Linear);
+            Cv2.CopyMakeBorder(resize_img, resize_img, 0, 0, 0,(int)(imgW - resize_img.Cols), BorderTypes.Constant, new Scalar( 127, 127, 127));
+            return resize_img;
+        }
+
+
     }
 }
