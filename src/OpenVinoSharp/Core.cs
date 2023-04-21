@@ -37,7 +37,17 @@
         // @param image_size 图片矩阵长度
         public void load_input_data(string node_name, byte[] image_data, ulong image_size, int type)
         {
-            core_ptr = NativeMethods.load_image_input_data(core_ptr, node_name, ref image_data[0], image_size, type);
+            float[] mean = new float[3];
+            float[] std = new float[3];
+            core_ptr = NativeMethods.load_image_input_data(core_ptr, node_name, ref image_data[0], image_size, type,ref mean[0],ref std[0]);
+        }
+        // @brief 加载图片推理数据
+        // @param input_node_name 输入节点名
+        // @param image_data 图片矩阵
+        // @param image_size 图片矩阵长度
+        public void load_input_data(string node_name, byte[] image_data, ulong image_size, int type, float[] mean, float[] std)
+        {
+            core_ptr = NativeMethods.load_image_input_data(core_ptr, node_name, ref image_data[0], image_size, type, ref mean[0], ref std[0]);
         }
         // @brief 模型推理
         public void infer()

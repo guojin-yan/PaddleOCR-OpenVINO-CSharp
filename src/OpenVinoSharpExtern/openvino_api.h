@@ -30,7 +30,7 @@ EXTERN_C __MIDL_DECLSPEC_DLLEXPORT void* STDMETHODCALLTYPE set_input_sharp(
 
 // @brief 将图片数据加载到tensor中的数据内存上
 EXTERN_C __MIDL_DECLSPEC_DLLEXPORT void* STDMETHODCALLTYPE load_image_input_data(
-	void* core_ptr, const wchar_t* w_node_name, uchar * image_data, size_t image_size, int type);
+	void* core_ptr, const wchar_t* w_node_name, uchar * image_data, size_t image_size, int type, float* mean, float* std);
 
 // @brief 将其他数据加载到tensor中的数据内存上
 EXTERN_C __MIDL_DECLSPEC_DLLEXPORT void* STDMETHODCALLTYPE load_input_data(

@@ -70,8 +70,7 @@ void* set_input_sharp(void* core_ptr, const wchar_t* w_node_name, size_t* input_
 // @param return_ptr CoreStruct指针
 // @return 异常标志
 void* load_image_input_data(void* core_ptr, const wchar_t* w_node_name, uchar* image_data,
-    size_t image_size,int type) { 
-    
+    size_t image_size,int type, float* mean, float* std) { 
     // 读取推理模型地址
     CoreStruct* openvino_core = (CoreStruct*)core_ptr;
     std::string node_name = wchar_to_string(w_node_name);
@@ -79,7 +78,6 @@ void* load_image_input_data(void* core_ptr, const wchar_t* w_node_name, uchar* i
     ov::Tensor input_image_tensor = openvino_core->infer_request.get_tensor(node_name);
     int input_H = input_image_tensor.get_shape()[2]; //获得"image"节点的Height
     int input_W = input_image_tensor.get_shape()[3]; //获得"image"节点的Width
-
     // 对输入图片进行预处理
     cv::Mat input_image = data_to_mat(image_data, image_size); // 读取输入图片
     cv::Mat blob_image;
@@ -192,6 +190,24 @@ void* load_image_input_data(void* core_ptr, const wchar_t* w_node_name, uchar* i
         }
         cv::merge(rgb_channels, blob_image); // 合并图片数据通道
     }
+    else if (type == 6) {
+        // 对输入图片按照tensor输入要求进行缩放
+        cv::resize(blob_image, blob_image, cv::Size(input_W, input_H), 0, 0, cv::INTER_LINEAR);
+        // 图像数据归一化，减均值mean，除以方差std
+        // PaddleDetection模型使用imagenet数据集的均值 Mean = [0.485, 0.456, 0.406]和方差 std = [0.229, 0.224, 0.225]
+        std::vector<float> mean_values = {mean[0],mean[1],mean[2]};
+        std::vector<float> std_values = { std[0],std[1],std[2] };
+        //std::cout << "mean_values:" << mean_values[0] << "  " << mean_values[1] << "  " << mean_values[2] << std::endl;
+        //std::cout << "mean_values:" << std_values[0] << "  " << std_values[1] << "  " << std_values[2] << std::endl;
+        //std::cout << "(input_W, input_H) = (" << input_W << ", " << input_H << ")" << std::endl;
+        std::vector<cv::Mat> rgb_channels(3);
+        cv::split(blob_image, rgb_channels); // 分离图片数据通道
+        for (auto i = 0; i < rgb_channels.size(); i++) {
+            //分通道依此对每一个通道数据进行归一化处理
+            rgb_channels[i].convertTo(rgb_channels[i], CV_32FC1, 1.0 / std_values[i], (0.0 - mean_values[i]) / std_values[i]);
+        }
+        cv::merge(rgb_channels, blob_image); // 合并图片数据通道
+    }
     // 将图片数据填充到tensor数据内存中
     fill_tensor_data_image(input_image_tensor, blob_image);
 
@@ -242,8 +258,9 @@ void read_infer_result_F32(void* core_ptr, const wchar_t* w_node_name, int size,
     std::string output_node_name = wchar_to_string(w_node_name);
     // 读取指定节点的tensor
     const ov::Tensor& output_tensor = openvino_core->infer_request.get_tensor(output_node_name);
-    std::vector<size_t> input_shape = output_tensor.get_shape(); //获得输入节点的形状
-    int output_size = std::accumulate(input_shape.begin(), input_shape.end(), 1, std::multiplies<int>()); // 获取长度
+    std::vector<size_t> output_shape = output_tensor.get_shape(); //获得输入节点的形状
+    //std::cout << "output_shape = " << output_shape[0] << " " << output_shape[1] << " " << output_shape[2] << std::endl;
+    int output_size = std::accumulate(output_shape.begin(), output_shape.end(), 1, std::multiplies<int>()); // 获取长度
     int fact_size = size < output_size ? size : output_size;
     // 获取网络节点数据地址
     const float* results = output_tensor.data<const float>();

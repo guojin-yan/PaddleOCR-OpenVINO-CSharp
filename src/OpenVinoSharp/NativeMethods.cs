@@ -20,7 +20,7 @@ namespace OpenVinoSharp
 
         [DllImport(dll_extern, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
         public extern static IntPtr load_image_input_data(IntPtr core, string input_node_name, 
-            ref byte image_data, ulong image_size, int type);
+            ref byte image_data, ulong image_size, int type, ref float mean, ref float std);
 
         [DllImport(dll_extern, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
         public extern static IntPtr load_input_data(IntPtr core, string input_node_name, ref float input_data);
