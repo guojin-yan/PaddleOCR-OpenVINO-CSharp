@@ -10,9 +10,6 @@ namespace paddleocr
 {
     public class OcrRec : Predictor
     {
-        
-
-        
         private int[] m_rec_image_shape;
 
         List<string> m_label_list;
@@ -101,3 +98,5 @@ namespace paddleocr
         }
     }
 }
+
+

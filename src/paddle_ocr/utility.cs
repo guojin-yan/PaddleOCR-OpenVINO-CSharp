@@ -7,6 +7,7 @@ using OpenCvSharp;
 
 namespace paddleocr
 {
+
     public class OCRPredictResult
     {
         public List<List<int>> box = new List<List<int>>();
@@ -14,10 +15,6 @@ namespace paddleocr
         public float score = -1.0f;
         public float cls_score = -1.0f;
         public int cls_label = -1;
-
-        public OCRPredictResult()
-        {
-        }
     }
     public class StructurePredictResult
     {
@@ -28,10 +25,6 @@ namespace paddleocr
         string html = "";
         float html_score = -1.0f;
         float confidence = -1.0f;
-
-        public StructurePredictResult()
-        {
-        }
     }
 
     public enum EnumDataType
