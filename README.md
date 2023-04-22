@@ -1,5 +1,21 @@
 # 基于C#和OpenVINO部署PaddleOCR模型
 
+&emsp;  基于OpenVINO模型推理库，在C#语言下，调用封装的OpenVINO动态链接库，部署推理PaddleOCR中的文字识别模型；实现了在C#平台使用PaddleOCR文字识别模型识别文字。
+
+&emsp;  OpenVinoSharp源码在GitHub和Gitee上已开源，可以直接通过Git获取所有源码
+
+&emsp;  在Github上克隆下载：
+
+```
+git clone https://github.com/guojin-yan/OpenVinoSharp_deploy_PaddleOCR.git
+```
+
+&emsp;  在Gitee上克隆下载：
+
+```
+git clone https://gitee.com/guojin-yan/OpenVinoSharp_deploy_PaddleOCR.git
+```
+
 ## 1.OpenVINO
 
 &emsp;  OpenVINO™是英特尔基于自身现有的硬件平台开发的一种可以加快高性能计算机视觉和深度学习视觉应用开发速度工具套件，用于快速开发应用程序和解决方案，以解决各种任务（包括人类视觉模拟、自动语音识别、自然语言处理和推荐系统等）。
@@ -561,7 +577,32 @@ public List<OCRPredictResult> predict(Mat image)
 
 该项目还包含其他文本以及图片处理类，由于内容较多，此处不做赘述，可以通过查看项目源码获取。
 
-## 6. 文本识别结果
+## 6. 文本识别过程与结果
+
+在前面我们已经对文本识别方法进行了封装，最后在使用时，我们只需要指定预测模型与测试图片，调用**PaddleOCR**类即可实现。
+
+```c#
+public void test()
+{
+    string det_path = @".\..\..\..\..\..\model\ppocr_model_v3\det_onnx\model.onnx";
+    string cls_path = @".\..\..\..\..\..\model\\ppocr_model_v3\cls_onnx\model.onnx";
+    string rec_path = @".\..\..\..\..\..\model\\ppocr_model_v3\rec_onnx\model.onnx";
+    // 模型路径
+    Dictionary<string, string> model_path = new Dictionary<string, string>();
+    model_path.Add("det_model", det_path);
+    model_path.Add("cls_model", cls_path);
+    model_path.Add("rec_model", rec_path);
+
+    PaddleOCR paddleOCR = new PaddleOCR(model_path);
+
+    string image_path = @".\..\..\..\..\..\image\demo_1.jpg";
+    Mat image = Cv2.ImRead(image_path);
+    List<OCRPredictResult> ocr_results = paddleOCR.predict(image);
+    Utility.print_result(ocr_results);
+    string save_path = Path.GetDirectoryName(image_path) + "\\" + Path.GetFileNameWithoutExtension(image_path) + "_reault.jpg";
+    Utility.VisualizeBboxes(image.Clone(), ocr_results, save_path);
+}
+```
 
 下图是文本区域识别与处理后的文本区域，可以看出经过模型识别与轮廓处理，已经可以实现文本区域完全获取。
 
