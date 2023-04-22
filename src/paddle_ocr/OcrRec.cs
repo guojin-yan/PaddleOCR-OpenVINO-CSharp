@@ -10,13 +10,9 @@ namespace paddleocr
 {
     public class OcrRec : Predictor
     {
-        private Core m_core;
-        private EnumDataType m_type = 0;
-        private string m_input_name;
-        private string m_output_name;
+        
 
-        private float[] m_mean = new float[3] { 0.5f * 255, 0.5f * 255, 0.5f * 255 };
-        private float[] m_scale = new float[3] { 0.5f * 255, 0.5f * 255, 0.5f * 255 };
+        
         private int[] m_rec_image_shape;
 
         List<string> m_label_list;
@@ -37,6 +33,9 @@ namespace paddleocr
             m_rec_image_shape = new int[] { (int)input_size_rec[1], (int)input_size_rec[2], (int)input_size_rec[3]};
             // 设置模型节点形状
             m_core.set_input_sharp(m_input_name, input_size_rec);
+
+            m_mean = new float[3] { 0.5f * 255, 0.5f * 255, 0.5f * 255 };
+            m_scale = new float[3] { 0.5f * 255, 0.5f * 255, 0.5f * 255 };
         }
 
         public void predict(List<Mat> img_list, List<string> rec_texts, List<float> rec_text_scores)
@@ -62,17 +61,10 @@ namespace paddleocr
                 //Cv2.ImShow("resize_img", resize_img);
                 //Cv2.WaitKey(0);
 
-                byte[] image_data_det = resize_img.ImEncode(".bmp");
-                ulong image_size_det = Convert.ToUInt64(image_data_det.Length);
-                // 将图片数据加载到模型
-                m_core.load_input_data(m_input_name, image_data_det, image_size_det, (int)m_type, m_mean, m_scale);
-
-                //*******************4.模型推理****************//
-                // 模型推理
-                m_core.infer();
                 int result_cls_length = 40 * 6625;
-                float[] result_cls = m_core.read_infer_result<float>(m_output_name, result_cls_length);
+                float[] result_cls = infer(resize_img, result_cls_length);
 
+                
 
                 string str_res = "";
                 int argmax_idx;

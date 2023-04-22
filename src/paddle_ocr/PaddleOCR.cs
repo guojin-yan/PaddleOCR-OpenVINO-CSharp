@@ -59,7 +59,7 @@ namespace paddleocr
             }
         }
 
-        public void predict(Mat image) 
+        public List<OCRPredictResult> predict(Mat image) 
         {
             DateTime start = DateTime.Now;
 
@@ -92,28 +92,7 @@ namespace paddleocr
             TimeSpan timeSpan = end - start;
             Console.WriteLine("图片预测时间：{0} ms",timeSpan.TotalMilliseconds);
 
-            Utility.print_result(ocr_results);
-
-            // 将文字区域标注出来
-            for (int r = 0; r < ocr_results.Count; r++)
-            {
-                var ocr_result = ocr_results[r];
-                var box = ocr_result.box;
-
-                //Console.WriteLine("1({0}, {1})", box[0][0], box[0][1]);
-                //Console.WriteLine("2({0}, {1})", box[1][0], box[1][1]);
-                //Console.WriteLine("3({0}, {1})", box[2][0], box[2][1]);
-                //Console.WriteLine("4({0}, {1})", box[3][0], box[3][1]);
-
-                Rect rect = new Rect(box[0][0], box[0][1], box[3][0] - box[0][0], box[1][1] - box[0][1]);
-                Cv2.Rectangle(image, rect, new Scalar(0, 0, 255), 2);
-            }
-
-
-
-            Cv2.ImShow("image_rect", image);
-
-            Cv2.WaitKey(0);
+            return ocr_results;
         }
 
     }

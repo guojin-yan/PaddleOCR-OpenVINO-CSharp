@@ -10,10 +10,6 @@ namespace paddleocr
 {
     public class OcrDet : Predictor
     {
-        private Core m_core;
-        private EnumDataType m_type = 0;
-        private string m_input_name;
-        private string m_output_name;
         private float m_det_db_thresh = 0.3f;
         private float m_det_db_box_thresh = 0.5f;
         private string m_det_db_score_mode = "slow";
@@ -42,23 +38,13 @@ namespace paddleocr
         {
             float ratio_h;
             float ratio_w;
-            Mat re_image = m_preprocess.ResizeImgType0(image, m_limit_type, m_limit_side_len, out ratio_h, out ratio_w);
+            Mat resize_img = m_preprocess.ResizeImgType0(image, m_limit_type, m_limit_side_len, out ratio_h, out ratio_w);
 
             ratio_h = (float)(640.0 / image.Cols);
             ratio_w = (float)(640.0 / image.Rows);
 
-
-            byte[] image_data_det = re_image.ImEncode(".bmp");
-            ulong image_size_det = Convert.ToUInt64(image_data_det.Length);
-            // 将图片数据加载到模型
-            m_core.load_input_data(m_input_name, image_data_det, image_size_det, (int)m_type);
-
-            //*******************4.模型推理****************//
-            // 模型推理
-            m_core.infer();
-            //*******************5.读取模型输出数据****************//
             int result_det_length = 640 * 640;
-            float[] result_det = m_core.read_infer_result<float>(m_output_name, result_det_length);
+            float[] result_det = infer(resize_img, result_det_length);
 
             // 将模型输出转为byte格式
             byte[] result_det_byte = new byte[result_det_length];
@@ -75,7 +61,7 @@ namespace paddleocr
             // 图像阈值处理
             Mat bit_map = new Mat();
             Cv2.Threshold(cbuf_map, bit_map, threshold, maxvalue, ThresholdTypes.Binary);
-            Cv2.ImShow("bit_map", bit_map);
+            //Cv2.ImShow("bit_map", bit_map);
   
             List<List<List<int>>> boxes = m_post_processor.BoxesFromBitmap(pred_map, bit_map, m_det_db_box_thresh, m_det_db_unclip_ratio,
                 m_det_db_score_mode);

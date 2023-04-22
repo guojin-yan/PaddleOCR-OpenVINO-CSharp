@@ -100,23 +100,30 @@ namespace paddleocr
             }
         }
 
-        void VisualizeBboxes(Mat srcimg, List<OCRPredictResult> ocr_result, string save_path)
+        public static void VisualizeBboxes(Mat srcimg, List<OCRPredictResult> ocr_result, string save_path)
         {
             Mat img_vis = srcimg.Clone();;
             for (int n = 0; n < ocr_result.Count; n++)
             {
                 Point[] rook_points = new Point[4];
+                rook_points[0] = new Point((int)(ocr_result[n].box[0][0]), (int)(ocr_result[n].box[0][1]));
+                rook_points[1] = new Point((int)(ocr_result[n].box[2][0]), (int)(ocr_result[n].box[2][1]));
+                rook_points[2] = new Point((int)(ocr_result[n].box[3][0]), (int)(ocr_result[n].box[3][1]));
+                rook_points[3] = new Point((int)(ocr_result[n].box[1][0]), (int)(ocr_result[n].box[1][1]));
                 for (int m = 0; m < ocr_result[n].box.Count; m++)
                 {
-                    rook_points[m] = new Point((int)(ocr_result[n].box[m][0]), (int)(ocr_result[n].box[m][1]));
+                    
                 }
 
                 Point[][] ppt = { rook_points };
                 Cv2.Polylines(img_vis, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
+                
             }
 
             Cv2.ImWrite(save_path, img_vis);
             Console.WriteLine("The detection visualized image saved in {0}.", save_path);
+            Cv2.ImShow("result", img_vis);
+            Cv2.WaitKey(0);
         }
 
 
