@@ -86,6 +86,14 @@
                 return result;
             }
         }
+
+        public float[] read_infer_result_f(string node_name, int data_size) {
+            float[] inference_result = new float[data_size];
+            NativeMethods.read_infer_result_F32(core_ptr, node_name, data_size, ref inference_result[0]);
+            //result = (T[])Convert.ChangeType(inference_result, typeof(T[]));
+            return inference_result;
+        }
+
         // @brief 删除创建的地址
         public void delet()
         {

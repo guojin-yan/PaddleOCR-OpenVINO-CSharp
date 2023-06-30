@@ -611,3 +611,4 @@ public void test()
 根据识别结果，识别文本方向并最后识别文字内容。
 
 ![image-20230422143911528](https://s2.loli.net/2023/04/22/VIl7yJYPdMK2ufi.png)
+

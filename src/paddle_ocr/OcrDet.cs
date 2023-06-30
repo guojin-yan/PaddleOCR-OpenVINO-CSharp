@@ -45,7 +45,7 @@ namespace paddleocr
 
             int result_det_length = 640 * 640;
             float[] result_det = infer(resize_img, result_det_length);
-
+            
             // 将模型输出转为byte格式
             byte[] result_det_byte = new byte[result_det_length];
             for (int i = 0; i < result_det_length; i++)
@@ -60,12 +60,17 @@ namespace paddleocr
             double maxvalue = 255;
             // 图像阈值处理
             Mat bit_map = new Mat();
+            //Cv2.ImShow("pred_map", pred_map);
+            //Cv2.WaitKey(0);
             Cv2.Threshold(cbuf_map, bit_map, threshold, maxvalue, ThresholdTypes.Binary);
             //Cv2.ImShow("bit_map", bit_map);
+            //Cv2.WaitKey(0);
   
             List<List<List<int>>> boxes = m_post_processor.BoxesFromBitmap(pred_map, bit_map, m_det_db_box_thresh, m_det_db_unclip_ratio,
                 m_det_db_score_mode);
+            Console.WriteLine("-------------------:" + boxes.Count);
             boxes = m_post_processor.FilterTagDetRes(boxes, ratio_h, ratio_w, image);
+            Console.WriteLine("-------------------:" + boxes.Count);
             return boxes;
         }
     }

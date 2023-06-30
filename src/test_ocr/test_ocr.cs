@@ -13,6 +13,7 @@ namespace test_ocr
         public void test()
         {
             string det_path = @".\..\..\..\..\..\model\ppocr_model_v3\det_onnx\model.onnx";
+            //string det_path = @"E:\Text_Model\PP-OCR\ppocr_model_v3\det_onnx\model.onnx";
             string cls_path = @".\..\..\..\..\..\model\\ppocr_model_v3\cls_onnx\model.onnx";
             //string cls_path = @"E:\Text_Model\PP-OCR\ppocr_model_v3\cls_paddle\inference.pdmodel";
             string rec_path = @".\..\..\..\..\..\model\\ppocr_model_v3\rec_onnx\model.onnx";
@@ -25,6 +26,7 @@ namespace test_ocr
             PaddleOCR paddleOCR = new PaddleOCR(model_path);
 
             string image_path = @".\..\..\..\..\..\image\demo_1.jpg";
+
             Mat image = Cv2.ImRead(image_path);
             List<OCRPredictResult> ocr_results = paddleOCR.predict(image);
             Utility.print_result(ocr_results);

@@ -264,6 +264,7 @@ void read_infer_result_F32(void* core_ptr, const wchar_t* w_node_name, int size,
     int fact_size = size < output_size ? size : output_size;
     // 获取网络节点数据地址
     const float* results = output_tensor.data<const float>();
+
     // 将输出结果复制到输出地址指针中
     for (int i = 0; i < fact_size; i++) {
         *infer_result = results[i];
@@ -286,6 +287,7 @@ void read_infer_result_I32(void* core_ptr, const wchar_t* w_node_name, int* infe
     int output_size = std::accumulate(input_shape.begin(), input_shape.end(), 1, std::multiplies<int>()); // 获取长度
     // 获取网络节点数据地址
     const int* results = output_tensor.data<const int>();
+
     // 将输出结果赋值到输出地址指针中
     for (int i = 0; i < output_size; i++) {
         *infer_result = results[i];
