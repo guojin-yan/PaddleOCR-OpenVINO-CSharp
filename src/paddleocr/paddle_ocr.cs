@@ -9,9 +9,9 @@ namespace PaddleOCR
         OcrRec ocrRec;
         public OCRPredictor(string det_model, string cls_model, string rec_model)
         {
-            ocrDet = new OcrDet("./../../../../../model/ir/ch_PP-OCRv4_det_infer/inference.xml");
-            ocrCls = new OcrCls("./../../../../../model/ir/ch_ppocr_mobile_v2.0_cls_infer/inference.xml");
-            ocrRec = new OcrRec("./../../../../../model/ir/ch_PP-OCRv4_rec_infer/inference.xml");
+            ocrDet = new OcrDet(det_model);
+            ocrCls = new OcrCls(cls_model);
+            ocrRec = new OcrRec(rec_model);
         }
 
         public List<OCRPredictResult> predict_det(Mat image)
