@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PaddleOCR</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.8.0.20230708" />
+    <PackageReference Include="OpenVINO.CSharp.API" Version="2023.2.0.2" />
+    <PackageReference Include="OpenVINO.runtime.win" Version="2023.2.0.1" />
+  </ItemGroup>
+
+</Project>
