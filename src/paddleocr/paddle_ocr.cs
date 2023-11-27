@@ -7,13 +7,11 @@ namespace PaddleOCR
         OcrDet ocrDet;
         OcrCls ocrCls;
         OcrRec ocrRec;
-        public OCRPredictor()
+        public OCRPredictor(string det_model, string cls_model, string rec_model)
         {
-            ocrDet = new OcrDet("E:\\Model\\paddleocr4\\ch_PP-OCRv4_det_infer\\inference.pdmodel");
-
-            ocrCls = new OcrCls("E:\\Model\\paddleocr4\\ch_ppocr_mobile_v2.0_cls_infer\\inference.pdmodel");
-            ocrRec = new OcrRec("E:\\Model\\paddleocr4\\ch_PP-OCRv4_rec_infer\\inference.pdmodel",
-                label_path: "E:\\GitSpace\\PaddleOCR-OpenVINO-CSharp\\dict\\ppocr_keys_v1.txt");
+            ocrDet = new OcrDet("./../../../../../model/ir/ch_PP-OCRv4_det_infer/inference.xml");
+            ocrCls = new OcrCls("./../../../../../model/ir/ch_ppocr_mobile_v2.0_cls_infer/inference.xml");
+            ocrRec = new OcrRec("./../../../../../model/ir/ch_PP-OCRv4_rec_infer/inference.xml");
         }
 
         public List<OCRPredictResult> predict_det(Mat image)

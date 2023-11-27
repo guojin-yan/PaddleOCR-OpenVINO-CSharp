@@ -1,0 +1,3 @@
+paddle model: https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv4/paddle.zip
+
+IR model: https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv4/ir.zip

@@ -42,7 +42,7 @@ namespace PaddleOCR
         public static class RecOption
         {
             public static string device = "CPU";
-            public static string label_path = "./../../dict/ppocr_keys_v1.txt";
+            public static string label_path = "./../../../../../dict/ppocr_keys_v1.txt";
             public static float[] mean = new float[] { 0.5f, 0.5f, 0.5f };
             public static float[] scale = new float[] { 1 / 0.5f, 1 / 0.5f, 1 / 0.5f };
             public static long[] input_size = new long[] { 1, 3, 48, 320 };
