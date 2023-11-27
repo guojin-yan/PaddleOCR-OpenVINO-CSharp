@@ -1,0 +1,1 @@
+# PaddleOCR-OpenVINO-CSharp
