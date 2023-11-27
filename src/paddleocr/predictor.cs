@@ -54,12 +54,22 @@ namespace PaddleOCR
             m_infer_request.infer();
             DateTime end = DateTime.Now;
             Console.WriteLine("infer time: " + (end - start).TotalMilliseconds.ToString());
-            Tensor output_tensor = m_infer_request.get_output_tensor();
+            if (m_model.get_outputs_size() > 1)
+            {
+                Tensor output_tensor = m_infer_request.get_output_tensor(0);
+                float[] result = output_tensor.get_data<float>((int)output_tensor.get_size());
+                return result;
+            }
+            else
+            {
+                Tensor output_tensor = m_infer_request.get_output_tensor();
+                float[] result = output_tensor.get_data<float>((int)output_tensor.get_size());
+                return result;
+            }
             //Console.WriteLine(input_tensor.get_shape().to_string());
             //Console.WriteLine(output_tensor.get_shape().to_string());
             //Console.WriteLine(input_tensor.get_size());
-            float[] result = output_tensor.get_data<float>((int)output_tensor.get_size());
-            return result;
+
         }
     }
 }
