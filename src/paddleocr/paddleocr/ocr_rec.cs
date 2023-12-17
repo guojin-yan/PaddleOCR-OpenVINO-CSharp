@@ -24,7 +24,7 @@ namespace PaddleOCR
             : base(rec_model, device ?? rec_opt.device, mean ?? rec_opt.mean, scale ?? rec_opt.scale,
                    input_size ?? rec_opt.input_size, is_scale ?? rec_opt.is_scale, use_gpu ?? rec_opt.use_gpu)
         {
-            m_label_list = Utility.read_dict(label_path ?? rec_opt.label_path);
+            m_label_list = PaddleOcrUtility.read_dict(label_path ?? rec_opt.label_path);
             m_label_list.Insert(0, "#");
             m_label_list.Add(" ");
             m_rec_batch_num = batch_num ?? rec_opt.batch_num;
@@ -40,7 +40,7 @@ namespace PaddleOCR
             {
                 width_list.Add((float)(img_list[i].Cols) / img_list[i].Rows);
             }
-            List<int> indices = Utility.argsort(width_list);
+            List<int> indices = PaddleOcrUtility.argsort(width_list);
 
             for (int beg_img_no = 0; beg_img_no < img_num; beg_img_no += m_rec_batch_num)
             {
@@ -88,7 +88,7 @@ namespace PaddleOCR
                         float[] res = new float[6625];
                         Array.Copy(predict_batch, 6625 * n, res, 0, 6625);
                         // get idx and score
-                        argmax_idx = (int)(Utility.argmax(res, out score));
+                        argmax_idx = (int)(PaddleOcrUtility.argmax(res, out score));
                         // get score
                
 

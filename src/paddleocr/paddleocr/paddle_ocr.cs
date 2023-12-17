@@ -64,7 +64,7 @@ namespace PaddleOCR
             List<Mat> img_list = new List<Mat>();
             for (int j = 0; j < ocr_results.Count; j++)
             {
-                Mat crop_img = Utility.get_rotate_crop_image(image, ocr_results[j].box);
+                Mat crop_img = PaddleOcrUtility.get_rotate_crop_image(image, ocr_results[j].box);
                 img_list.Add(crop_img);
                 //Cv2.ImShow("resize_img", crop_img);
                 //Cv2.WaitKey(0);

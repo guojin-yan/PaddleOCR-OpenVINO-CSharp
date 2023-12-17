@@ -49,7 +49,7 @@ namespace PaddleOCR
             public static bool is_scale = true;
             public static bool use_gpu = false;
             public static int batch_num = 1;
-    }
+        }
 
     }
 }
