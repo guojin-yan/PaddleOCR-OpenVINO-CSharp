@@ -39,9 +39,10 @@ namespace PaddleOCR
 
     }
 
-    public class PaddleOcrUtility 
+    public class PaddleOcrUtility
     {
-        public static List<string> read_dict(string path) {
+        public static List<string> read_dict(string path)
+        {
             List<string> list = new List<string>();
             StreamReader str = new StreamReader(path);
             while (true)
@@ -81,7 +82,7 @@ namespace PaddleOCR
                 // rec
                 if (ocr_result[i].score != -1.0)
                 {
-                    mes += String.Format("rec text:  {0}\t  rec score: {1} \t", ocr_result[i].text,ocr_result[i].score);
+                    mes += String.Format("rec text:  {0}\t  rec score: {1} \t", ocr_result[i].text, ocr_result[i].score);
                 }
 
                 // cls
@@ -95,7 +96,7 @@ namespace PaddleOCR
 
         public static void visualize_bboxes(Mat srcimg, List<OCRPredictResult> ocr_result, string save_path)
         {
-            Mat img_vis = srcimg.Clone();;
+            Mat img_vis = srcimg.Clone(); ;
             for (int n = 0; n < ocr_result.Count; n++)
             {
                 Point[] rook_points = new Point[4];
@@ -105,12 +106,12 @@ namespace PaddleOCR
                 rook_points[3] = new Point((int)(ocr_result[n].box[1][0]), (int)(ocr_result[n].box[1][1]));
                 for (int m = 0; m < ocr_result[n].box.Count; m++)
                 {
-                    
+
                 }
 
                 Point[][] ppt = { rook_points };
                 Cv2.Polylines(img_vis, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-                
+
             }
 
             Cv2.ImWrite(save_path, img_vis);
@@ -222,7 +223,7 @@ namespace PaddleOCR
         public static List<int> argsort(List<float> array)
         {
             int array_len = array.Count;
-            
+
             //生成值和索引的列表
             List<float[]> new_array = new List<float[]> { };
             for (int i = 0; i < array_len; i++)
@@ -241,13 +242,13 @@ namespace PaddleOCR
         }
         public static int argmax(float[] data, out float max)
         {
-             max = data[0];
+            max = data[0];
             int index = 0;
             for (int i = 0; i < data.Length; i++)
             {
                 if (max < data[i])
                 {
-                    
+
                     index = i;
                     max = data[i];
                 }
@@ -257,7 +258,7 @@ namespace PaddleOCR
 
         public static int argmax<T>(List<T> array, int start_index, int end_index)
         {
-            List<T> new_array = array.GetRange(start_index, end_index-start_index);
+            List<T> new_array = array.GetRange(start_index, end_index - start_index);
             return new_array.IndexOf(new_array.Max());
         }
 
@@ -400,6 +401,6 @@ namespace PaddleOCR
 
     }
 
-  
+
 
 }
