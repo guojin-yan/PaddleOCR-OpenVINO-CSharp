@@ -12,7 +12,7 @@ namespace test_ocr
             test_ocr();
         }
 
-        static void test_ocr() 
+        static void test_ocr()
         {
             Mat image = Cv2.ImRead("./../../../../../image/demo_1.jpg");
 
@@ -43,7 +43,7 @@ namespace test_ocr
             Cv2.WaitKey(0);
         }
 
-        static void test_det() 
+        static void test_det()
         {
             Console.WriteLine("Hello, World!");
             OcrDet ocrDet = new OcrDet("./../../../../../model/ir/ch_PP-OCRv4_det_infer/inference.xml");
@@ -82,7 +82,7 @@ namespace test_ocr
             Cv2.WaitKey(0);
         }
 
-        static void test_cls() 
+        static void test_cls()
         {
             Console.WriteLine("Hello, World!");
             OcrCls ocrCls = new OcrCls("./../../../../../model/ir/ch_ppocr_mobile_v2.0_cls_infer/inference.xml");
@@ -112,9 +112,10 @@ namespace test_ocr
             imgs.Add(Cv2.ImRead("./../../../../../image/demo_14.jpg"));
 
             List<string> rec_texts = new List<string>(new string[imgs.Count]);
-            List< float > rec_text_scores = new List<float>(new float[imgs.Count]);
+            List<float> rec_text_scores = new List<float>(new float[imgs.Count]);
             ocrRec.predict(imgs, rec_texts, rec_text_scores);
             Console.WriteLine("Hello, World!");
         }
     }
 }
+

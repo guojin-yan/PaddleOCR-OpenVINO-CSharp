@@ -367,12 +367,13 @@ namespace PaddleOCR
 
     class TablePostProcessor
     {
-        public TablePostProcessor(string label_path, bool merge_no_span_structure = true) {
+        public TablePostProcessor(string label_path, bool merge_no_span_structure = true)
+        {
             this.label_list_ = PaddleOcrUtility.read_dict(label_path);
             if (merge_no_span_structure)
             {
                 this.label_list_.Add("<td></td>");
-                for (int count = 0; count < label_list_.Count; )
+                for (int count = 0; count < label_list_.Count;)
                 {
                     if (label_list_[count] == "<td>")
                     {
@@ -414,7 +415,7 @@ namespace PaddleOCR
                     // html tag
                     int step_start_idx = (batch_idx * structure_probs_shape[1] + step_idx) *
                                          structure_probs_shape[2];
-                    char_idx = (int)(PaddleOcrUtility.argmax(structure_probs,step_start_idx,step_start_idx + structure_probs_shape[2]));
+                    char_idx = (int)(PaddleOcrUtility.argmax(structure_probs, step_start_idx, step_start_idx + structure_probs_shape[2]));
                     char_score = Math.Max(
                         structure_probs[step_start_idx],
                         structure_probs[step_start_idx + structure_probs_shape[2]]);
@@ -470,6 +471,4 @@ namespace PaddleOCR
         private string end = "eos";
         private string beg = "sos";
     };
-
-
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaddleOCR.paddleocr
+namespace PaddleOCR
 {
     public class StructurePredictor : OCRPredictor
     {
@@ -13,9 +13,9 @@ namespace PaddleOCR.paddleocr
         bool flag_table_model = false;
 
         public StructurePredictor(string table_model_path = null, string det_model = null, string cls_model = null, string rec_model = null)
-            :base(det_model, cls_model, rec_model)
+            : base(det_model, cls_model, rec_model)
         {
-            if (table_model_path != null) 
+            if (table_model_path != null)
             {
                 table_model = new StruTabRec(table_model_path);
             }
@@ -30,7 +30,7 @@ namespace PaddleOCR.paddleocr
             List<Mat> img_list = new List<Mat>();
             img_list.Add(img);
 
-            this.table_model.predict(img_list, structure_html_tags, structure_scores,structure_boxes);
+            this.table_model.predict(img_list, structure_html_tags, structure_scores, structure_boxes);
 
 
             List<OCRPredictResult> ocr_result = new List<OCRPredictResult>();
@@ -45,7 +45,7 @@ namespace PaddleOCR.paddleocr
 
                 // crop image
                 List<Mat> rec_img_list = new List<Mat>();
-                List<int> ocr_box =new List<int>();
+                List<int> ocr_box = new List<int>();
                 for (int j = 0; j < ocr_result.Count; j++)
                 {
                     ocr_box = PaddleOcrUtility.xyxyxyxy2xyxy(ocr_result[j].box);
