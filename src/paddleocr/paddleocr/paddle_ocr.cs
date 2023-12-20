@@ -13,7 +13,7 @@ namespace PaddleOCR
 
         public OCRPredictor(string det_model = null, string cls_model = null, string rec_model = null)
         {
-            if (det_model != null) 
+            if (det_model != null)
             {
                 flag_det = true;
                 ocrDet = new OcrDet(det_model);
@@ -30,7 +30,7 @@ namespace PaddleOCR
                 ocrRec = new OcrRec(rec_model);
             }
 
-            
+
         }
 
         public List<OCRPredictResult> predict_det(Mat image)
@@ -41,7 +41,7 @@ namespace PaddleOCR
             return ocr_results;
         }
 
-        public List<OCRPredictResult> predict_det(Mat image, List<OCRPredictResult> ocr_results) 
+        public List<OCRPredictResult> predict_det(Mat image, List<OCRPredictResult> ocr_results)
         {
             // 文字区域识别
             List<List<List<int>>> boxes = ocrDet.predict(image);
@@ -52,7 +52,7 @@ namespace PaddleOCR
                 res.box = boxes[i];
                 ocr_results.Add(res);
             }
-            return  PaddleOcrUtility.sorted_boxes(ocr_results);
+            return PaddleOcrUtility.sorted_boxes(ocr_results);
         }
 
         public List<OCRPredictResult> predict_cls(List<Mat> img_list)
@@ -63,7 +63,7 @@ namespace PaddleOCR
             return ocr_results;
         }
 
-        public void predict_cls(List<Mat> img_list, List<OCRPredictResult> ocr_results) 
+        public void predict_cls(List<Mat> img_list, List<OCRPredictResult> ocr_results)
         {
             List<int> lables = new List<int>();
             List<float> scores = new List<float>();
@@ -162,7 +162,7 @@ namespace PaddleOCR
             return ocr_results;
         }
 
-        public List<OCRPredictResult> predict(Mat image) 
+        public List<OCRPredictResult> predict(Mat image)
         {
             if (flag_det && flag_cls && flag_rec)
             {
@@ -310,10 +310,10 @@ namespace PaddleOCR
                 return new List<OCRPredictResult>();
             }
         }
-        public List<List<OCRPredictResult>> prdict(List<Mat> images) 
+        public List<List<OCRPredictResult>> prdict(List<Mat> images)
         {
             List<List<OCRPredictResult>> ocr_results = new List<List<OCRPredictResult>>();
-            foreach (Mat image in images) 
+            foreach (Mat image in images)
             {
                 ocr_results.Add(predict(image));
             }
