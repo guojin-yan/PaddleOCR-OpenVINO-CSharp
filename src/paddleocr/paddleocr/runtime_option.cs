@@ -50,7 +50,6 @@ namespace PaddleOCR
             public static bool use_gpu = false;
             public static int batch_num = 1;
         }
-
         public static class StruTabRecOption
         {
             public static string device = "CPU";
