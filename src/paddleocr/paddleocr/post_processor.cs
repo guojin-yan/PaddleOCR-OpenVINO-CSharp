@@ -1,8 +1,10 @@
 ﻿using iTextSharp.text.pdf.parser.clipper;
 using OpenCvSharp;
+using PaddleOCR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -470,5 +472,154 @@ namespace PaddleOCR
         private List<string> label_list_ = new List<string>();
         private string end = "eos";
         private string beg = "sos";
+    };
+
+    class PicodetPostProcessor
+    {
+        private List<string> label_list_;
+        private double score_threshold_ = 0.4;
+        private double nms_threshold_ = 0.5;
+        private int num_class_ = 5;
+        public List<int> fpn_stride_ = new List<int> { 8, 16, 32, 64 };
+        public PicodetPostProcessor(string label_path, List<int> fpn_stride,double score_threshold = 0.4, double nms_threshold = 0.5)
+        {
+            this.label_list_ = PaddleOcrUtility.read_dict(label_path);
+            this.score_threshold_ = score_threshold;
+            this.nms_threshold_ = nms_threshold;
+            this.num_class_ = label_list_.Count;
+            this.fpn_stride_ = fpn_stride;
+        }
+
+
+        public void Run(List<StructurePredictResult> results, List<List<float>> outs, List<int> ori_shape, List<int> resize_shape, int reg_max)
+        {
+            int in_h = resize_shape[0];
+            int in_w = resize_shape[1];
+            float scale_factor_h = resize_shape[0] / (float)(ori_shape[0]);
+            float scale_factor_w = resize_shape[1] / (float)(ori_shape[1]);
+
+            List<List<StructurePredictResult>> bbox_results = new List<List<StructurePredictResult>>();
+            for (int i = 0; i < num_class_; ++i) bbox_results.Add(new List<StructurePredictResult>());
+            for (int i = 0; i < this.fpn_stride_.Count; ++i)
+            {
+                int feature_h = (int)Math.Ceiling((double)in_h / this.fpn_stride_[i]);
+                int feature_w = (int)Math.Ceiling((double)in_w / this.fpn_stride_[i]);
+                for (int idx = 0; idx < feature_h * feature_w; idx++)
+                {
+                    // score and label
+                    float score = 0;
+                    int cur_label = 0;
+                    for (int label = 0; label < this.num_class_; label++)
+                    {
+                        if (outs[i][idx * this.num_class_ + label] > score)
+                        {
+                            score = outs[i][idx * this.num_class_ + label];
+                            cur_label = label;
+                        }
+                    }
+                    // bbox
+                    if (score > this.score_threshold_)
+                    {
+                        int row = idx / feature_w;
+                        int col = idx % feature_w;
+                        List<float> bbox_pred = outs[i + this.fpn_stride_.Count].GetRange(idx * 4 * reg_max, 1 * 4 * reg_max);
+                        bbox_results[cur_label].Add(
+                            this.disPred2Bbox(bbox_pred, cur_label, score, col, row,
+                                               this.fpn_stride_[i], resize_shape, reg_max));
+                    }
+                }
+            }
+            for (int i = 0; i < bbox_results.Count; i++)
+            {
+                bool flag = bbox_results[i].Count <= 0;
+            }
+            for (int i = 0; i < bbox_results.Count; i++)
+            {
+                bool flag = bbox_results[i].Count <= 0;
+                if (bbox_results[i].Count <= 0)
+                {
+                    continue;
+                }
+                bbox_results[i] = this.nms(bbox_results[i], (float)this.nms_threshold_);
+                foreach (var box in bbox_results[i])
+                {
+                    box.box[0] = box.box[0] / scale_factor_w;
+                    box.box[2] = box.box[2] / scale_factor_w;
+                    box.box[1] = box.box[1] / scale_factor_h;
+                    box.box[3] = box.box[3] / scale_factor_h;
+                    results.Add(box);
+                }
+            }
+        }
+
+        StructurePredictResult disPred2Bbox(List<float> bbox_pred, int label, float score, int x, int y, int stride, List<int> im_shape, int reg_max)
+        {
+            float ct_x = (x + 0.5f) * stride;
+            float ct_y = (y + 0.5f) * stride;
+            List<float> dis_pred = new List<float>(4);
+            for (int i = 0; i < 4; ++i) dis_pred.Add(0.0f);
+
+            for (int i = 0; i < 4; i++)
+            {
+                float dis = 0;
+                List<float> bbox_pred_i = bbox_pred.GetRange(i * reg_max, reg_max);
+                List<float> dis_after_sm = PaddleOcrUtility.activation_function_softmax(bbox_pred_i);
+                for (int j = 0; j < reg_max; j++)
+                {
+                    dis += j * dis_after_sm[j];
+                }
+                dis *= stride;
+                dis_pred[i] = dis;
+            }
+
+            float xmin = Math.Max(ct_x - dis_pred[0], .0f);
+            float ymin = Math.Max(ct_y - dis_pred[1], .0f);
+            float xmax = Math.Min(ct_x + dis_pred[2], (float)im_shape[1]);
+            float ymax = Math.Min(ct_y + dis_pred[3], (float)im_shape[0]);
+
+            StructurePredictResult result_item = new StructurePredictResult();
+            result_item.box = new List<float> { xmin, ymin, xmax, ymax };
+            result_item.type = this.label_list_[label];
+            result_item.confidence = score;
+
+            return result_item;
+        }
+
+
+        List<StructurePredictResult> nms(List<StructurePredictResult> input_boxes, float nms_threshold)
+        {
+
+            input_boxes.Sort((x, y) => x.confidence.CompareTo(y.confidence));
+            List<int> picked = new List<int>(); 
+            for (int i = 0; i < input_boxes.Count; ++i) picked.Add(1);
+            for (int i = 0; i < input_boxes.Count; ++i)
+            {
+                if (picked[i] == 0)
+                {
+                    continue;
+                }
+                for (int j = i + 1; j < input_boxes.Count; ++j)
+                {
+                    if (picked[j] == 0)
+                    {
+                        continue;
+                    }
+                    float iou = PaddleOcrUtility.iou(input_boxes[i].box, input_boxes[j].box);
+                    if (iou > nms_threshold)
+                    {
+                        picked[j] = 0;
+                    }
+                }
+            }
+            List<StructurePredictResult> input_boxes_nms = new List<StructurePredictResult>();
+            for (int i = 0; i < input_boxes.Count; ++i)
+            {
+                if (picked[i] == 1)
+                {
+                    input_boxes_nms.Add(input_boxes[i]);
+                }
+            }
+            return input_boxes_nms;
+        }
     };
 }

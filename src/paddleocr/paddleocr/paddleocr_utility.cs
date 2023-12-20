@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenCvSharp;
 using OpenVinoSharp.Extensions.Utility;
+using static OpenCvSharp.FileStorage;
 namespace PaddleOCR
 {
 
@@ -94,7 +95,7 @@ namespace PaddleOCR
             }
         }
 
-        public static void visualize_bboxes(Mat srcimg, List<OCRPredictResult> ocr_result, string save_path)
+        public static Mat visualize_bboxes(Mat srcimg, List<OCRPredictResult> ocr_result)
         {
             Mat img_vis = srcimg.Clone(); ;
             for (int n = 0; n < ocr_result.Count; n++)
@@ -113,14 +114,10 @@ namespace PaddleOCR
                 Cv2.Polylines(img_vis, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
 
             }
-
-            Cv2.ImWrite(save_path, img_vis);
-            Console.WriteLine("The detection visualized image saved in {0}.", save_path);
-            Cv2.ImShow("result", img_vis);
-            Cv2.WaitKey(0);
+            return img_vis;
         }
 
-        public static void VisualizeBboxes(Mat srcimg, StructurePredictResult structure_result, string save_path)
+        public static Mat visualize_bboxes(Mat srcimg, StructurePredictResult structure_result)
         {
             Mat img_vis = new Mat();
             srcimg.CopyTo(img_vis);
@@ -150,11 +147,7 @@ namespace PaddleOCR
                     Cv2.Rectangle(img_vis, rook_points[0], rook_points[1], new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
                 }
             }
-
-            Cv2.ImWrite(save_path, img_vis);
-            Console.WriteLine("The detection visualized image saved in {0}.", save_path);
-            Cv2.ImShow("result", img_vis);
-            Cv2.WaitKey(0);
+            return img_vis;
         }
 
 
@@ -219,6 +212,7 @@ namespace PaddleOCR
                 return dst_img;
             }
         }
+
 
         public static List<int> argsort(List<float> array)
         {
@@ -317,8 +311,6 @@ namespace PaddleOCR
             box1.Add(bottom);
             return box1;
         }
-
-
         public static float iou(List<int> box1, List<int> box2)
         {
             int area1 = Math.Max(0, box1[2] - box1[0]) * Math.Max(0, box1[3] - box1[1]);
@@ -344,7 +336,6 @@ namespace PaddleOCR
                 return intersect / (sum_area - intersect + 0.00000001f);
             }
         }
-
         public static float iou(List<float> box1, List<float> box2)
         {
             float area1 = Math.Max((float)0.0, box1[2] - box1[0]) *
@@ -372,8 +363,6 @@ namespace PaddleOCR
                 return intersect / (sum_area - intersect + 0.00000001f);
             }
         }
-
-
         public static List<OCRPredictResult> sorted_boxes(List<OCRPredictResult> ocr_result)
         {
             ocr_result = ocr_result.OrderBy(t => t.box[0][1]).ThenBy(t => t.box[0][0]).ToList();
@@ -395,12 +384,25 @@ namespace PaddleOCR
             }
             return ocr_result;
         }
+        public static List<float> activation_function_softmax(List<float> src)
+        {
+            int length = src.Count;
+            List<float> dst = new List<float>(length);
+            for (int i = 0; i < length; ++i) dst.Add(0.0f);
+            float alpha = (float)(src.GetRange(0,length).Max());
+            float denominator=0;
 
+            for (int i = 0; i < length; ++i)
+            {
+                dst[i] = (float)Math.Exp(src[i] - alpha);
+                denominator += dst[i];
+            }
 
-
-
+            for (int i = 0; i < length; ++i)
+            {
+                dst[i] /= denominator;
+            }
+            return dst;
+        }
     }
-
-
-
 }

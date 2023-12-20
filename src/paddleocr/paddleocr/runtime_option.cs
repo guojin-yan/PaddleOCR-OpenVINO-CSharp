@@ -63,5 +63,21 @@ namespace PaddleOCR
             public static float thresh = 0.9f;
         }
 
+        public static class StruLayRecOption
+        {
+            public static string device = "CPU";
+            public static string label_path = "./../../../../../dict/layout_cdla_dict.txt";
+            public static float[] mean = new float[] { 0.485f, 0.456f, 0.406f };
+            public static float[] scale = new float[] { 1 / 0.229f, 1 / 0.224f, 1 / 0.225f };
+            public static long[] input_size = new long[] { 1, 3, 800, 608 };
+            public static bool is_scale = true;
+            public static bool use_gpu = false;
+            public static int batch_num = 1;
+            public static double score_threshold = 0.4; 
+            public static double nms_threshold = 0.5;
+            public static  List<int> fpn_stride = new List<int>(new int[] { 8, 16, 32, 64 });
+
+        }
+
     }
 }

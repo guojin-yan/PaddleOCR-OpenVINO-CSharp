@@ -1,15 +1,16 @@
 ﻿using OpenCvSharp;
+using System.Collections.Generic;
 
 namespace PaddleOCR
 {
     public class OCRPredictor
     {
-        OcrDet ocrDet;
-        OcrCls ocrCls;
-        OcrRec ocrRec;
-        bool flag_det = false;
-        bool flag_rec = false;
-        bool flag_cls = false;
+        protected OcrDet ocrDet;
+        protected OcrCls ocrCls;
+        protected OcrRec ocrRec;
+        protected bool flag_det = false;
+        protected bool flag_rec = false;
+        protected bool flag_cls = false;
 
         public OCRPredictor(string det_model = null, string cls_model = null, string rec_model = null)
         {
@@ -29,19 +30,17 @@ namespace PaddleOCR
                 flag_rec = true;
                 ocrRec = new OcrRec(rec_model);
             }
-
-
         }
 
-        public List<OCRPredictResult> predict_det(Mat image)
+        public List<OCRPredictResult> det(Mat image)
         {
             // 文本区域识别
             List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-            predict_det(image, ocr_results);
+            det(image, ocr_results);
             return ocr_results;
         }
 
-        public List<OCRPredictResult> predict_det(Mat image, List<OCRPredictResult> ocr_results)
+        public List<OCRPredictResult> det(Mat image, List<OCRPredictResult> ocr_results)
         {
             // 文字区域识别
             List<List<List<int>>> boxes = ocrDet.predict(image);
@@ -55,15 +54,8 @@ namespace PaddleOCR
             return PaddleOcrUtility.sorted_boxes(ocr_results);
         }
 
-        public List<OCRPredictResult> predict_cls(List<Mat> img_list)
-        {
-            List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-            // 文字方向判断
-            predict_cls(img_list, ocr_results);
-            return ocr_results;
-        }
 
-        public void predict_cls(List<Mat> img_list, List<OCRPredictResult> ocr_results)
+        public List<OCRPredictResult> cls(List<Mat> img_list, List<OCRPredictResult> ocr_results)
         {
             List<int> lables = new List<int>();
             List<float> scores = new List<float>();
@@ -74,16 +66,11 @@ namespace PaddleOCR
                 ocr_results[i].cls_label = lables[i];
                 ocr_results[i].cls_score = scores[i];
             }
-        }
-
-
-        public List<OCRPredictResult> predict_rec(List<Mat> img_list)
-        {
-            List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-            predict_rec(img_list, ocr_results);
             return ocr_results;
         }
-        public void predict_rec(List<Mat> img_list, List<OCRPredictResult> ocr_results)
+
+
+        public List<OCRPredictResult> rec(List<Mat> img_list, List<OCRPredictResult> ocr_results)
         {
             List<string> rec_texts = new List<string>(new string[img_list.Count]);
             List<float> rec_text_scores = new List<float>(new float[img_list.Count]);
@@ -93,231 +80,65 @@ namespace PaddleOCR
                 ocr_results[i].text = rec_texts[i];
                 ocr_results[i].score = rec_text_scores[i];
             }
+            return ocr_results;
         }
-        public List<OCRPredictResult> predict_all(Mat image)
+
+        public List<OCRPredictResult> ocr(Mat img, bool det, bool rec, bool cls)
         {
-            DateTime start = DateTime.Now;
-
-            // 文本区域识别
-            List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-            // 文字区域识别
-            List<List<List<int>>> boxes = ocrDet.predict(image);
-
-            for (int i = 0; i < boxes.Count; i++)
+            List<OCRPredictResult> ocr_result = new List<OCRPredictResult>();
+            // det
+            if (!flag_det)
             {
-                OCRPredictResult res = new OCRPredictResult();
-                res.box = boxes[i];
-                ocr_results.Add(res);
+                throw new Exception("The ocrDet is not init!");
             }
+            ocr_result = this.det(img, ocr_result);
 
 
             // crop image
             List<Mat> img_list = new List<Mat>();
-            for (int j = 0; j < ocr_results.Count; j++)
+            for (int j = 0; j < ocr_result.Count; j++)
             {
-                Mat crop_img = PaddleOcrUtility.get_rotate_crop_image(image, ocr_results[j].box);
+                Mat crop_img = new Mat();
+                crop_img = PaddleOcrUtility.get_rotate_crop_image(img, ocr_result[j].box);
                 img_list.Add(crop_img);
-                //Cv2.ImShow("resize_img", crop_img);
-                //Cv2.WaitKey(0);
             }
-
-
-            // 文字方向判断
-            List<int> lables = new List<int>();
-            List<float> scores = new List<float>();
-            ocrCls.predict(img_list, lables, scores);
-            // output cls results
-            for (int i = 0; i < lables.Count; i++)
+            // cls
+            if (cls)
             {
-                ocr_results[i].cls_label = lables[i];
-                ocr_results[i].cls_score = scores[i];
-            }
-
-            // 图片翻转
-            for (int i = 0; i < img_list.Count; i++)
-            {
-                if (ocr_results[i].cls_label % 2 == 0 &&
-                    ocr_results[i].cls_score > ocrCls.m_cls_thresh) { }
-                else
+                if (!flag_cls)
                 {
-                    Cv2.Rotate(img_list[i], img_list[i], RotateFlags.Rotate180);
+                    throw new Exception("The ocrCls is not init!");
                 }
-                //Cv2.ImShow("ss", img_list[i]);
-                //Cv2.WaitKey(0);
-            }
-
-            List<string> rec_texts = new List<string>(new string[img_list.Count]);
-            List<float> rec_text_scores = new List<float>(new float[img_list.Count]);
-            ocrRec.predict(img_list, rec_texts, rec_text_scores);
-            for (int i = 0; i < rec_texts.Count; i++)
-            {
-                ocr_results[i].text = rec_texts[i];
-                ocr_results[i].score = rec_text_scores[i];
-            }
-
-            //DateTime end = DateTime.Now;
-            //TimeSpan timeSpan = end - start;
-            //Console.WriteLine("图片预测时间：{0} ms", timeSpan.TotalMilliseconds);
-
-            return ocr_results;
-        }
-
-        public List<OCRPredictResult> predict(Mat image)
-        {
-            if (flag_det && flag_cls && flag_rec)
-            {
-                return predict_all(image);
-            }
-            else if (flag_det && !flag_cls && !flag_rec)
-            {
-                return predict_det(image);
-            }
-            else if (!flag_det && flag_cls && !flag_rec)
-            {
-                List<Mat> img_list = new List<Mat>();
-                return predict_cls(img_list);
-            }
-            else if (!flag_det && !flag_cls && flag_rec)
-            {
-                List<Mat> img_list = new List<Mat>();
-                return predict_rec(img_list);
-            }
-            else if (!flag_det && flag_cls && flag_rec)
-            {
-                List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-                List<Mat> img_list = new List<Mat>();
-                img_list.Add(image);
-                // 文字方向判断
-                List<int> lables = new List<int>();
-                List<float> scores = new List<float>();
-                ocrCls.predict(img_list, lables, scores);
-                // output cls results
-                for (int i = 0; i < lables.Count; i++)
-                {
-                    ocr_results[i].cls_label = lables[i];
-                    ocr_results[i].cls_score = scores[i];
-                }
-
-                // 图片翻转
+                ocr_result = this.cls(img_list, ocr_result);
                 for (int i = 0; i < img_list.Count; i++)
                 {
-                    if (ocr_results[i].cls_label % 2 == 0 &&
-                        ocr_results[i].cls_score > ocrCls.m_cls_thresh) { }
-                    else
-                    {
-                        Cv2.Rotate(img_list[i], img_list[i], RotateFlags.Rotate180);
-                    }
-                    //Cv2.ImShow("ss", img_list[i]);
-                    //Cv2.WaitKey(0);
-                }
-
-                List<string> rec_texts = new List<string>(new string[img_list.Count]);
-                List<float> rec_text_scores = new List<float>(new float[img_list.Count]);
-                ocrRec.predict(img_list, rec_texts, rec_text_scores);
-                for (int i = 0; i < rec_texts.Count; i++)
-                {
-                    ocr_results[i].text = rec_texts[i];
-                    ocr_results[i].score = rec_text_scores[i];
-                }
-
-                return ocr_results;
-            }
-            else if (flag_det && !flag_cls && flag_rec)
-            {
-                // 文本区域识别
-                List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-                // 文字区域识别
-                List<List<List<int>>> boxes = ocrDet.predict(image);
-
-                for (int i = 0; i < boxes.Count; i++)
-                {
-                    OCRPredictResult res = new OCRPredictResult();
-                    res.box = boxes[i];
-                    ocr_results.Add(res);
-                }
-                ocr_results = ocr_results.OrderBy(t => t.box[0][1]).ThenBy(t => t.box[0][0]).ToList();
-
-
-                // crop image
-                List<Mat> img_list = new List<Mat>();
-                for (int j = 0; j < ocr_results.Count; j++)
-                {
-                    Mat crop_img = PaddleOcrUtility.get_rotate_crop_image(image, ocr_results[j].box);
-                    img_list.Add(crop_img);
-                }
-
-                List<string> rec_texts = new List<string>(new string[img_list.Count]);
-                List<float> rec_text_scores = new List<float>(new float[img_list.Count]);
-                ocrRec.predict(img_list, rec_texts, rec_text_scores);
-                for (int i = 0; i < rec_texts.Count; i++)
-                {
-                    ocr_results[i].text = rec_texts[i];
-                    ocr_results[i].score = rec_text_scores[i];
-                }
-
-                return ocr_results;
-            }
-            else if (flag_det && flag_cls && !flag_rec)
-            {
-                // 文本区域识别
-                List<OCRPredictResult> ocr_results = new List<OCRPredictResult>();
-                // 文字区域识别
-                List<List<List<int>>> boxes = ocrDet.predict(image);
-
-                for (int i = 0; i < boxes.Count; i++)
-                {
-                    OCRPredictResult res = new OCRPredictResult();
-                    res.box = boxes[i];
-                    ocr_results.Add(res);
-                }
-                ocr_results = ocr_results.OrderBy(t => t.box[0][1]).ThenBy(t => t.box[0][0]).ToList();
-
-
-                // crop image
-                List<Mat> img_list = new List<Mat>();
-                for (int j = 0; j < ocr_results.Count; j++)
-                {
-                    Mat crop_img = PaddleOcrUtility.get_rotate_crop_image(image, ocr_results[j].box);
-                    img_list.Add(crop_img);
-                }
-
-                // 文字方向判断
-                List<int> lables = new List<int>();
-                List<float> scores = new List<float>();
-                ocrCls.predict(img_list, lables, scores);
-                // output cls results
-                for (int i = 0; i < lables.Count; i++)
-                {
-                    ocr_results[i].cls_label = lables[i];
-                    ocr_results[i].cls_score = scores[i];
-                }
-
-                // 图片翻转
-                for (int i = 0; i < img_list.Count; i++)
-                {
-                    if (ocr_results[i].cls_label % 2 == 0 &&
-                        ocr_results[i].cls_score > ocrCls.m_cls_thresh) { }
-                    else
+                    if (ocr_result[i].cls_label % 2 == 1 && ocr_result[i].cls_score > ocrCls.m_cls_thresh)
                     {
                         Cv2.Rotate(img_list[i], img_list[i], RotateFlags.Rotate180);
                     }
                 }
+            }
+            // rec
+            if (rec)
+            {
+                if (!flag_rec)
+                {
+                    throw new Exception("The ocrRec is not init!");
+                }
+                ocr_result = this.rec(img_list, ocr_result);
+            }
+            return ocr_result;
+        }
 
-                return ocr_results;
-            }
-            else
-            {
-                return new List<OCRPredictResult>();
-            }
-        }
-        public List<List<OCRPredictResult>> prdict(List<Mat> images)
+        public List<List<OCRPredictResult>> ocr(List<Mat> img_list, bool det, bool rec, bool cls)
         {
-            List<List<OCRPredictResult>> ocr_results = new List<List<OCRPredictResult>>();
-            foreach (Mat image in images)
+            List<List<OCRPredictResult>> results = new List<List<OCRPredictResult>>();
+            foreach (Mat img in img_list) 
             {
-                ocr_results.Add(predict(image));
+                results.Add(ocr(img, det, rec, cls));
             }
-            return ocr_results;
+            return results;
         }
+
     }
 }

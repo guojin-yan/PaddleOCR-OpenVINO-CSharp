@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,16 +11,78 @@ namespace PaddleOCR
     public class StructurePredictor : OCRPredictor
     {
         StruTabRec table_model;
+        StruLayRec layout_model;
         bool flag_table_model = false;
-
-        public StructurePredictor(string table_model_path = null, string det_model = null, string cls_model = null, string rec_model = null)
+        bool flag_layout_model = false;
+        public StructurePredictor(string layout_model_path = null, string table_model_path = null, string det_model = null, string rec_model = null, string cls_model = null)
             : base(det_model, cls_model, rec_model)
         {
+
+            if (layout_model_path != null)
+            {
+                layout_model = new StruLayRec(layout_model_path);
+                flag_layout_model = true;
+            }
             if (table_model_path != null)
             {
                 table_model = new StruTabRec(table_model_path);
+                flag_table_model = true;
             }
         }
+        public List<StructurePredictResult> structure(Mat srcimg, bool layout, bool table, bool ocr)
+        {
+            Mat img = new Mat();
+            srcimg.CopyTo(img);
+
+            List<StructurePredictResult> structure_results = new List<StructurePredictResult> ();
+
+            if (layout)
+            {
+                if (!flag_layout_model) 
+                {
+                    throw new Exception("The StruLayRec is not init!");
+                }
+                structure_results = this.layout(img, structure_results);
+            }
+            else
+            {
+                StructurePredictResult res =new StructurePredictResult();
+                res.type = "table";
+                res.box = new List<float>() { 0.0f, 0.0f, 0.0f, 0.0f };
+                res.box[2] = img.Cols;
+                res.box[3] = img.Rows;
+                structure_results.Add(res);
+            }
+            Mat roi_img =new Mat();
+            for (int i = 0; i < structure_results.Count; i++)
+            {
+                // crop image
+                roi_img = PaddleOcrUtility.crop_image(img, structure_results[i].box);
+                Cv2.ImShow("aa", roi_img);
+                Cv2.WaitKey(0);
+                if (structure_results[i].type == "table" && table)
+                {
+                    if (!flag_table_model)
+                    {
+                        throw new Exception("The StruTabRec is not init!");
+                    }
+                    structure_results[i] = this.table(roi_img, structure_results[i]);
+                }
+                else if (ocr)
+                {
+                    structure_results[i].text_res = this.ocr(roi_img, true, true, false);
+                }
+            }
+
+            return structure_results;
+        }
+
+
+        public List<StructurePredictResult> layout(Mat img, List<StructurePredictResult> structure_result)
+        {
+           return layout_model.predict(img, structure_result);
+        }
+
 
         public StructurePredictResult table(Mat img, StructurePredictResult structure_result)
         {
@@ -40,7 +103,7 @@ namespace PaddleOCR
             for (int i = 0; i < img_list.Count; i++)
             {
                 // det
-                ocr_result = this.predict_det(img_list[i], ocr_result);
+                ocr_result = this.det(img_list[i], ocr_result);
                 //
 
                 // crop image
@@ -61,7 +124,7 @@ namespace PaddleOCR
                 }
 
                 // rec
-                this.predict_rec(rec_img_list, ocr_result);
+                this.rec(rec_img_list, ocr_result);
                 // rebuild table
                 html = this.rebuild_table(structure_html_tags[i], structure_boxes[i],
                                            ocr_result);
@@ -71,10 +134,6 @@ namespace PaddleOCR
             }
             return structure_result;
         }
-
-
-
-
         float dis(List<int> box1, List<int> box2)
         {
             int x1_1 = box1[0];

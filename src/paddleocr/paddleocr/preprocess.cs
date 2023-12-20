@@ -1,10 +1,12 @@
 ﻿using OpenCvSharp;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Size = OpenCvSharp.Size;
 
 namespace PaddleOCR
 {
@@ -200,6 +202,11 @@ namespace PaddleOCR
             return resize_img;
         }
 
-
+        public static Mat Resize(Mat img, int h, int w)
+        {
+            Mat resize_img = new Mat();
+            Cv2.Resize(img, resize_img, new Size(w, h));
+            return resize_img;
+        }
     }
 }
