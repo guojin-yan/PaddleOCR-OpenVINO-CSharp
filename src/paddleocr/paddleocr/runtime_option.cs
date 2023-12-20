@@ -51,5 +51,18 @@ namespace PaddleOCR
             public static int batch_num = 1;
         }
 
+        public static class StruTabRecOption
+        {
+            public static string device = "CPU";
+            public static string label_path = "./../../../../../dict/table_structure_dict_ch.txt";
+            public static float[] mean = new float[] { 0.485f, 0.456f, 0.406f };
+            public static float[] scale = new float[] { 1 / 0.229f, 1 / 0.224f, 1 / 0.225f };
+            public static long[] input_size = new long[] { 1, 3, 488, 488 };
+            public static bool is_scale = true;
+            public static bool use_gpu = false;
+            public static int batch_num = 1;
+            public static float thresh = 0.9f;
+        }
+
     }
 }

@@ -362,4 +362,114 @@ namespace PaddleOCR
         }
 
     }
+
+
+
+    class TablePostProcessor
+    {
+        public TablePostProcessor(string label_path, bool merge_no_span_structure = true) {
+            this.label_list_ = PaddleOcrUtility.read_dict(label_path);
+            if (merge_no_span_structure)
+            {
+                this.label_list_.Add("<td></td>");
+                for (int count = 0; count < label_list_.Count; )
+                {
+                    if (label_list_[count] == "<td>")
+                    {
+                        label_list_.RemoveAt(count);
+                    }
+                    else
+                    {
+                        ++count;
+                    }
+                }
+            }
+            // add_special_char
+            this.label_list_.Insert(0, this.beg);
+            this.label_list_.Add(this.end);
+        }
+        public void Run(List<float> loc_preds, List<float> structure_probs,
+                 List<float> rec_scores, List<int> loc_preds_shape,
+                 List<int> structure_probs_shape,
+                 List<List<string>> rec_html_tag_batch,
+                 List<List<List<int>>> rec_boxes_batch,
+                 List<int> width_list, List<int> height_list)
+        {
+            for (int batch_idx = 0; batch_idx < structure_probs_shape[0]; batch_idx++)
+            {
+                // image tags and boxs
+                List<string> rec_html_tags = new List<string>();
+                List<List<int>> rec_boxes = new List<List<int>>();
+
+                float score = 0.0f;
+                int count = 0;
+                float char_score = 0.0f;
+                int char_idx = 0;
+
+                // step
+                for (int step_idx = 0; step_idx < structure_probs_shape[1]; step_idx++)
+                {
+                    string html_tag;
+                    List<int> rec_box = new List<int>();
+                    // html tag
+                    int step_start_idx = (batch_idx * structure_probs_shape[1] + step_idx) *
+                                         structure_probs_shape[2];
+                    char_idx = (int)(PaddleOcrUtility.argmax(structure_probs,step_start_idx,step_start_idx + structure_probs_shape[2]));
+                    char_score = Math.Max(
+                        structure_probs[step_start_idx],
+                        structure_probs[step_start_idx + structure_probs_shape[2]]);
+                    html_tag = this.label_list_[char_idx];
+
+                    if (step_idx > 0 && html_tag == this.end)
+                    {
+                        break;
+                    }
+                    if (html_tag == this.beg)
+                    {
+                        continue;
+                    }
+                    count += 1;
+                    score += char_score;
+                    rec_html_tags.Add(html_tag);
+
+                    // box
+                    if (html_tag == "<td>" || html_tag == "<td" || html_tag == "<td></td>")
+                    {
+                        for (int point_idx = 0; point_idx < loc_preds_shape[2]; point_idx++)
+                        {
+                            step_start_idx = (batch_idx * structure_probs_shape[1] + step_idx) *
+                                                 loc_preds_shape[2] +
+                                             point_idx;
+                            float point = loc_preds[step_start_idx];
+                            if (point_idx % 2 == 0)
+                            {
+                                point = (int)(point * width_list[batch_idx]);
+                            }
+                            else
+                            {
+                                point = (int)(point * height_list[batch_idx]);
+                            }
+                            rec_box.Add((int)point);
+                        }
+                        rec_boxes.Add(rec_box);
+                    }
+                }
+                score /= count;
+                if (float.IsNaN(score) || rec_boxes.Count == 0)
+                {
+                    score = -1;
+                }
+                rec_scores.Add(score);
+                rec_boxes_batch.Add(rec_boxes);
+                rec_html_tag_batch.Add(rec_html_tags);
+            }
+
+        }
+
+        private List<string> label_list_ = new List<string>();
+        private string end = "eos";
+        private string beg = "sos";
+    };
+
+
 }

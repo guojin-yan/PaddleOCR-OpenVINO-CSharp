@@ -178,5 +178,28 @@ namespace PaddleOCR
         }
 
 
+        public static void TableResizeImg(Mat img, Mat resize_img, int max_len = 488)
+        {
+            int w = img.Cols;
+            int h = img.Rows;
+
+            int max_wh = w >= h ? w : h;
+            float ratio = w >= h ? (float)(max_len) / (float)(w) : (float)(max_len) / (float)(h);
+
+            int resize_h = (int)((float)(h) * ratio);
+            int resize_w = (int)((float)(w) * ratio);
+
+            Cv2.Resize(img, resize_img, new Size(resize_w, resize_h));
+        }
+        public static Mat TablePadImg(Mat img, int max_len = 488)
+        {
+            int w = img.Cols;
+            int h = img.Rows;
+            Mat resize_img = new Mat();
+            Cv2.CopyMakeBorder(img, resize_img, 0, max_len - h, 0, max_len - w, BorderTypes.Constant, new Scalar(0, 0, 0));
+            return resize_img;
+        }
+
+
     }
 }

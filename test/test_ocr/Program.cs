@@ -16,14 +16,13 @@ namespace test_ocr
         {
             Mat image = Cv2.ImRead("./../../../../../image/demo_1.jpg");
 
-
-            string det_model = "./../../../../../model/ir/ch_PP-OCRv4_det_infer/inference.xml";
-            string cls_model = "./../../../../../model/ir/ch_ppocr_mobile_v2.0_cls_infer/inference.xml";
-            string rec_model = "./../../../../../model/ir/ch_PP-OCRv4_rec_infer/inference.xml";
+            string det_model = "./../../../../../model/paddle/ch_PP-OCRv4_det_infer/inference.pdmodel";
+            string cls_model = "./../../../../../model/paddle/ch_ppocr_mobile_v2.0_cls_infer/inference.pdmodel";
+            string rec_model = "./../../../../../model/paddle/ch_PP-OCRv4_rec_infer/inference.pdmodel";
 
             OCRPredictor ocr = new OCRPredictor(det_model, cls_model, rec_model);
             List<OCRPredictResult> ocr_result = ocr.predict(image);
-            Utility.print_result(ocr_result);
+            PaddleOcrUtility.print_result(ocr_result);
             for (int n = 0; n < ocr_result.Count; n++)
             {
                 Point[] rook_points = new Point[4];
