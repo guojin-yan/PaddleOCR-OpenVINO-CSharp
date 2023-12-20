@@ -21,7 +21,7 @@ namespace test_ocr
             string rec_model = "./../../../../../model/paddle/ch_PP-OCRv4_rec_infer/inference.pdmodel";
 
             OCRPredictor ocr = new OCRPredictor(det_model, cls_model, rec_model);
-            List<OCRPredictResult> ocr_result = ocr.predict(image);
+            List<OCRPredictResult> ocr_result = ocr.ocr(image,true,true,true);
             PaddleOcrUtility.print_result(ocr_result);
             for (int n = 0; n < ocr_result.Count; n++)
             {
