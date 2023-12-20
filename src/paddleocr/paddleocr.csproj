@@ -13,10 +13,7 @@
     <PackageReference Include="OpenVINO.CSharp.API" Version="2023.2.0.2" />
     <PackageReference Include="OpenVINO.runtime.win" Version="2023.2.0.1" />
     <PackageReference Include="SharpCompress" Version="0.34.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="paddleocr\" />
+    <PackageReference Include="Spire.XLS" Version="13.12.0" />
   </ItemGroup>
 
 </Project>
