@@ -1,224 +1,213 @@
-﻿using System;
+﻿using SharpCompress.Archives;
+using SharpCompress.Archives.Rar;
+using SharpCompress.Common;
+using SharpCompress.Readers.Tar;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO.Compression;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
-using OpenCvSharp;
 
-namespace PaddleOCR
+namespace OpenVinoSharp.Extensions.Utility
 {
-
-    public class OCRPredictResult
+    public static partial class Utility
     {
-        public List<List<int>> box = new List<List<int>>();
-        public string text = "";
-        public float score = -1.0f;
-        public float cls_score = -1.0f;
-        public int cls_label = -1;
-    }
-    public class StructurePredictResult
-    {
-        List<float> box = new List<float>();
-        List<Rect> cell_box = new List<Rect>();
-        string type = "";
-        List<OCRPredictResult> text_res = new List<OCRPredictResult>();
-        string html = "";
-        float html_score = -1.0f;
-        float confidence = -1.0f;
-    }
-
-    public enum EnumDataType
-    {
-        Normal_Standard_Deviation = 0,
-        Normal_Normalization = 1,
-        Normal_Non = 2,
-        Affine_Standard_Deviation = 3,
-        Affine_Normalization = 4,
-        Affine_Non = 5,
-        Normal_Standard_custom_Deviation = 6,
-
-    }
-
-    public class Utility 
-    {
-        public static List<string> read_dict(string path) {
-            List<string> list = new List<string>();
-            StreamReader str = new StreamReader(path);
-            while (true)
+        public static  T Clone<T>(T RealObject)
+        {
+            using (Stream objectStream = new MemoryStream())
             {
-                string line = str.ReadLine();
-                if (line == null)
-                {
-                    break;
-                }
-                list.Add(line);
+                //利用 System.Runtime.Serialization序列化与反序列化完成引用对象的复制
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(objectStream, RealObject);
+                objectStream.Seek(0, SeekOrigin.Begin);
+                return (T)formatter.Deserialize(objectStream);
             }
-            return list;
         }
 
-
-        public static void print_result(List<OCRPredictResult> ocr_result)
+        public static async Task<int> download_file_async(string url, string file_path, bool confirm=false)
         {
-            for (int i = 0; i < ocr_result.Count; i++)
+            
+            HttpClient client = new HttpClient();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            
+
+            await Console.Out.WriteLineAsync(
+            $"<{TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds).ToString(@"hh\:mm\:ss")}> Sending http request to {url}.");
+
+            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+
+            await Console.Out.WriteLineAsync(
+                $"<{TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds).ToString(@"hh\:mm\:ss")}> Http Response Accquired.");
+
+            long? content_len = response.Content.Headers.ContentLength;
+            long total_len = content_len.HasValue ? content_len.Value : -1;
+
+            await Console.Out.WriteLineAsync(
+                $"<{TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds).ToString(@"hh\:mm\:ss")}> Total download length is {((float)total_len / (1024.0f * 1024.0f)).ToString("0.00")} Mb.");
+            if (confirm) 
             {
-                string mes = "";
-                mes += String.Format("{0} \t", i);
-                // det
-                List<List<int>> boxes = ocr_result[i].box;
-                if (boxes.Count > 0)
+                await Console.Out.WriteAsync(
+                    "Continue download? Y/N:");
+
+                var k = Console.ReadKey();
+
+                while (k.KeyChar != 'y' && k.KeyChar != 'Y')
                 {
-                    mes += "det boxes: [";
-                    for (int n = 0; n < boxes.Count; n++)
+                    return -1;
+                }
+                await Console.Out.WriteLineAsync();
+            }
+
+
+            await Console.Out.WriteLineAsync(
+                $"<{TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds).ToString(@"hh\:mm\:ss")}> Download Started.");
+            File.Delete(file_path);
+            using var download_file = File.Create(file_path);
+
+            await Console.Out.WriteLineAsync(
+                $"<{TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds).ToString(@"hh\:mm\:ss")}> File created.");
+
+            using (var download = await response.Content.ReadAsStreamAsync())
+            {
+                var buffer = new byte[81920];
+                long total_bytes_read = 0;
+                int bytes_read;
+                DownloadConsole console = new DownloadConsole(total_len);
+
+                console.progress_bar(0, total_len);
+                while ((bytes_read = await download.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) != 0)
+                {
+                    await download_file.WriteAsync(buffer, 0, bytes_read).ConfigureAwait(false);
+                    total_bytes_read += bytes_read;
+                    console.progress_bar(total_bytes_read, stopwatch.ElapsedMilliseconds, true); 
+                }  
+            }
+            await Console.Out.WriteLineAsync();
+            await Console.Out.WriteLineAsync(
+                $"<{TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds).ToString(@"hh\:mm\:ss")}> File Downloaded, saved in {Path.GetFullPath(file_path)}.");
+
+            stopwatch.Stop();
+            return 0;
+        }
+
+        public static void unzip(string file_path, string extract_path)
+        {
+            string extension = Path.GetExtension(file_path);
+            if (extension == ".zip")
+            {
+                ZipFile.ExtractToDirectory(file_path, extract_path);
+            }
+            else if (extension == ".tar")
+            {
+                using (Stream stream = File.OpenRead(file_path))
+                {
+                    using (var tar_reader = TarReader.Open(stream))
                     {
-                        mes += String.Format("[{0} , {1}]", boxes[n][0], boxes[n][1]);
-                        if (n != boxes.Count - 1)
+                        while (tar_reader.MoveToNextEntry())
                         {
-                            mes += ',';
+                            if (!tar_reader.Entry.IsDirectory)
+                            {
+                                string entry_path = Path.Combine(extract_path, tar_reader.Entry.Key);
+                                Directory.CreateDirectory(Path.GetDirectoryName(entry_path));
+
+                                using (Stream entry_stream = tar_reader.OpenEntryStream())
+                                {
+                                    using (Stream output_stream = File.Create(entry_path))
+                                    {
+                                        entry_stream.CopyTo(output_stream);
+                                    }
+                                }
+                            }
                         }
                     }
-                    mes += "] \t";
                 }
-                // rec
-                if (ocr_result[i].score != -1.0)
+            }
+            else if (extension == ".rar") 
+            {
+                using (var archive = RarArchive.Open(file_path))
                 {
-                    mes += String.Format("rec text:  {0}\t  rec score: {1} \t", ocr_result[i].text,ocr_result[i].score);
-                }
-
-                // cls
-                if (ocr_result[i].cls_label != -1)
-                {
-                    mes += String.Format("cls label:  {0}\t  cls score: {1} \t", ocr_result[i].cls_label, ocr_result[i].cls_score);
-                }
-                Console.WriteLine(mes);
-            }
-        }
-
-        public static void visualize_bboxes(Mat srcimg, List<OCRPredictResult> ocr_result, string save_path)
-        {
-            Mat img_vis = srcimg.Clone();;
-            for (int n = 0; n < ocr_result.Count; n++)
-            {
-                Point[] rook_points = new Point[4];
-                rook_points[0] = new Point((int)(ocr_result[n].box[0][0]), (int)(ocr_result[n].box[0][1]));
-                rook_points[1] = new Point((int)(ocr_result[n].box[2][0]), (int)(ocr_result[n].box[2][1]));
-                rook_points[2] = new Point((int)(ocr_result[n].box[3][0]), (int)(ocr_result[n].box[3][1]));
-                rook_points[3] = new Point((int)(ocr_result[n].box[1][0]), (int)(ocr_result[n].box[1][1]));
-                for (int m = 0; m < ocr_result[n].box.Count; m++)
-                {
-                    
-                }
-
-                Point[][] ppt = { rook_points };
-                Cv2.Polylines(img_vis, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-                
-            }
-
-            Cv2.ImWrite(save_path, img_vis);
-            Console.WriteLine("The detection visualized image saved in {0}.", save_path);
-            Cv2.ImShow("result", img_vis);
-            Cv2.WaitKey(0);
-        }
-
-        public static Mat get_rotate_crop_image(Mat srcimage, List<List<int>> box)
-        {
-            Mat image = srcimage.Clone();
-            List<List<int>> points = Extensions.Clone<List<List<int>>>(box);
-
-            List<int> x_collect = new List<int> { box[0][0], box[1][0], box[2][0], box[3][0] };
-            List<int> y_collect = new List<int> { box[0][1], box[1][1], box[2][1], box[3][1] };
-            int left = x_collect.Min();
-            int right = x_collect.Max();
-            int top = y_collect.Min();
-            int bottom = y_collect.Max();
-
-            Mat img_crop = new Mat(image, new Rect(left, top, right - left, bottom - top));
-
-
-            // 倒影变换
-            for (int i = 0; i < points.Count; i++)
-            {
-                points[i][0] -= left;
-                points[i][1] -= top;
-            }
-
-            int img_crop_height = (int)Math.Sqrt(Math.Pow(points[0][0] - points[1][0], 2) +
-                                          Math.Pow(points[0][1] - points[1][1], 2));
-            int img_crop_width = (int)Math.Sqrt(Math.Pow(points[0][0] - points[2][0], 2) +
-                                           Math.Pow(points[0][1] - points[2][1], 2));
-
-            Point2f[] pts_std = new Point2f[4];
-            // 变换后坐标点
-            pts_std[0] = new Point2f(0.0f, 0.0f);
-            pts_std[1] = new Point2f(img_crop_width, 0.0f);
-            pts_std[2] = new Point2f(img_crop_width, img_crop_height);
-            pts_std[3] = new Point2f(0.0f, img_crop_height);
-            // 变换前坐标点
-            Point2f[] pointsf = new Point2f[4];
-            pointsf[0] = new Point2f(points[0][0], points[0][1]);
-            pointsf[3] = new Point2f(points[1][0], points[1][1]);
-            pointsf[1] = new Point2f(points[2][0], points[2][1]);
-            pointsf[2] = new Point2f(points[3][0], points[3][1]);
-
-            // 获取变化矩阵
-            Mat M = Cv2.GetPerspectiveTransform(pointsf, pts_std);
-
-            Mat dst_img = new Mat();
-            Cv2.WarpPerspective(img_crop, dst_img, M, new Size(img_crop_width, img_crop_height),
-                InterpolationFlags.Linear, BorderTypes.Replicate);
-
-            //Cv2.ImShow("resize_img", dst_img);
-            //Cv2.WaitKey(0);
-            if ((float)dst_img.Rows >= (float)dst_img.Cols * 1.5)
-            {
-                Mat srcCopy = new Mat(dst_img.Rows, dst_img.Cols, dst_img.Depth());
-                Cv2.Transpose(dst_img, srcCopy);
-                Cv2.Flip(srcCopy, srcCopy, 0);
-                return srcCopy;
-            }
-            else
-            {
-                return dst_img;
-            }
-        }
-
-        public static List<int> argsort(List<float> array)
-        {
-            int array_len = array.Count;
-            
-            //生成值和索引的列表
-            List<float[]> new_array = new List<float[]> { };
-            for (int i = 0; i < array_len; i++)
-            {
-                new_array.Add(new float[] { array[i], i });
-            }
-            //对列表按照值小到大进行排序
-            new_array.Sort((a, b) => a[0].CompareTo(b[0]));
-            //获取排序后的原索引
-            List<int> array_index = new List<int>();
-            foreach (float[] item in new_array)
-            {
-                array_index.Add((int)item[1]);
-            }
-            return array_index;
-        }
-        public static int argmax(float[] data, out float max)
-        {
-             max = data[0];
-            int index = 0;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (max < data[i])
-                {
-                    
-                    index = i;
-                    max = data[i];
+                    foreach (var entry in archive.Entries)
+                    {
+                        if (!entry.IsDirectory)
+                        {
+                            entry.WriteToDirectory(extract_path, new ExtractionOptions()
+                            {
+                                ExtractFullPath = true,
+                                Overwrite = true
+                            });
+                        }
+                    }
                 }
             }
-            return index;
+            else { throw new NotSupportedException("Decompression of this format file is currently not supported."); }
         }
-
+       
     }
 
-  
+
+
+    public class DownloadConsole
+    {
+        const char _block = '■';
+        const string _back = "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b";
+        const string _twirl = "-\\|/";
+
+        float total_m;
+        long total_len;
+
+        float last_down = 0;
+        long last_time = 0;
+        int num = 0;
+
+        public DownloadConsole(long total_len) 
+        {
+            this.total_m = (float)total_len / (1024.0f * 1024.0f);
+            this.total_len = total_len;
+        }
+        public void progress_bar(long down_len , long time, bool update = false)
+        {
+            int percent = (int)(((float)down_len / (float)total_len) * 100);
+            float down = down_len / (1024.0f * 1024.0f);
+            if (update)
+                Console.Write(_back);
+            Console.Write("<{0}> Downloading: [", TimeSpan.FromMilliseconds(time).ToString(@"hh\:mm\:ss"));
+            var p = (int)((percent / 10f) + .5f);
+            for (var i = 0; i < 10; ++i)
+            {
+                if (i > p)
+                    Console.Write("  ");
+                else if (i == p)
+                    Console.Write(_twirl[percent % _twirl.Length]);
+                else
+                    Console.Write(_block);
+            }
+            Console.Write("] {0,3:##0}%", percent);
+
+            if (num > 1000) 
+            {
+                float down_speed = (down - last_down) / (time - last_time) * 1000;
+                string s = string.Format(" <{0} Mb/s> {1} Mb/{2} Mb downloaded.", 
+                    down_speed.ToString("0.00"), down.ToString("0.00"), total_m.ToString("0.00"));
+                Console.Write(s);
+                num = 0;
+                last_down = down;
+                last_time = time;
+            }
+            else 
+            {
+                float down_speed = (down - last_down) / (time - last_time) * 1000;
+                TimeSpan time_now = TimeSpan.FromMilliseconds(time);
+                string formattedTime = time_now.ToString(@"hh\:mm\:ss");
+                string s = string.Format(" <{0} {1} Mb/s> {2} Mb/{3} Mb downloaded.",
+                                    formattedTime, down_speed.ToString("0.00"), down.ToString("0.00"), total_m.ToString("0.00"));
+                Console.Write(s);
+            }
+            num++;
+        }
+    }
 
 }
