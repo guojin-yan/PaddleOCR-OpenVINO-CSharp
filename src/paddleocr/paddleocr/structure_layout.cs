@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
-    using static System.Formats.Asn1.AsnWriter;
     using str_opt = RuntimeOption.StruLayRecOption;
     public class StruLayRec : Predictor
     {

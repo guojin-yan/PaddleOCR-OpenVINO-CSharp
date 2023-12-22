@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
-    using static Org.BouncyCastle.Math.EC.ECCurve;
     using str_opt = RuntimeOption.StruTabRecOption;
     public class StruTabRec : Predictor
     {

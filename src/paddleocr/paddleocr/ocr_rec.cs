@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
-    using static System.Formats.Asn1.AsnWriter;
     using rec_opt = RuntimeOption.RecOption;
     public class OcrRec : Predictor
     {

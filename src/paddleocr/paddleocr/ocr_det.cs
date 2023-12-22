@@ -8,7 +8,6 @@ using OpenVinoSharp;
 
 namespace PaddleOCR
 {
-    using static System.Formats.Asn1.AsnWriter;
     using det_opt = RuntimeOption.DetOption;
     public class OcrDet : Predictor
     {
