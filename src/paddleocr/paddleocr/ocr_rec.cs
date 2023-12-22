@@ -44,6 +44,21 @@ namespace PaddleOCR
             m_rec_image_shape = new int[] { (int)m_input_size[1], (int)m_input_size[2], (int)m_input_size[3] };
         }
 
+        // To detect redundant calls
+        private bool m_disposed_value;
+        protected override void Dispose(bool disposing)
+        {
+            if (!m_disposed_value)
+            {
+                if (disposing)
+                {
+                }
+
+                m_disposed_value = true;
+            }
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
         public void predict(List<Mat> img_list, List<string> rec_texts, List<float> rec_text_scores)
         {
             int img_num = img_list.Count;

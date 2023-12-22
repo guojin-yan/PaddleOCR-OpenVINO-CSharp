@@ -38,6 +38,24 @@ namespace PaddleOCR
             string label_path_ = config.strutabrec_option.label_path;
             m_table_post = new TablePostProcessor(label_path_, config.strutabrec_option.merge_no_span_structure);
         }
+
+
+        // To detect redundant calls
+        private bool m_disposed_value;
+        protected override void Dispose(bool disposing)
+        {
+            if (!m_disposed_value)
+            {
+                if (disposing)
+                {
+                }
+
+                m_disposed_value = true;
+            }
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void predict(List<Mat> img_list, List<List<string>> structure_html_tags, List<float> structure_scores, List<List<List<int>>> structure_boxes)
         {
             int img_num = img_list.Count;

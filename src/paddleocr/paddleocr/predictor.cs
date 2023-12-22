@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
-    public class Predictor
+    public class Predictor : IDisposable
     {
         protected Core m_core;
         protected Model m_model;
@@ -23,6 +23,8 @@ namespace PaddleOCR
         protected float[] m_scale;
 
         protected bool m_use_gpu;
+
+        private bool m_disposed_value;
 
         public Predictor(string model_path, string device, float[] mean, float[] scale, long[] input_size, 
             bool is_scale=true, bool use_gpu=false) 
@@ -45,6 +47,26 @@ namespace PaddleOCR
             m_is_scale = is_scale;
             m_use_gpu = use_gpu;
         }
+        public void Dispose()
+        {
+            m_infer_request.Dispose();
+            m_compiled_model.Dispose();
+            m_model.Dispose();
+            m_core.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!m_disposed_value)
+            {
+                if (disposing)
+                {
+                }
+                m_disposed_value = true;
+            }
+        }
+
         protected float[] infer(float[] input_data, long[] shape=null) {
            Tensor input_tensor = m_infer_request.get_input_tensor();
             if (shape != null)
@@ -69,7 +91,6 @@ namespace PaddleOCR
             //Console.WriteLine(input_tensor.get_shape().to_string());
             //Console.WriteLine(output_tensor.get_shape().to_string());
             //Console.WriteLine(input_tensor.get_size());
-
         }
     }
 }

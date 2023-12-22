@@ -47,6 +47,22 @@ namespace PaddleOCR
             post_processor_ = new PicodetPostProcessor(label_path_, m_fpn_stride, m_score_threshold, m_nms_threshold);
         }
 
+        // To detect redundant calls
+        private bool m_disposed_value;
+        protected override void Dispose(bool disposing)
+        {
+            if (!m_disposed_value)
+            {
+                if (disposing)
+                {
+                }
+
+                m_disposed_value = true;
+            }
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public List<StructurePredictResult> predict(Mat img, List<StructurePredictResult> result) 
         {
             Mat srcimg = new Mat();

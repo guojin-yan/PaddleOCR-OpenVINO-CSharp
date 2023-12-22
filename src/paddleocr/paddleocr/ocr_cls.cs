@@ -3,6 +3,7 @@ using OpenVinoSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace PaddleOCR
         public float m_cls_thresh;
         private int m_cls_batch_num;
         private long[] m_input_size;
+
+        
         public OcrCls(string cls_model, string? device = null, bool? use_gpu = null, bool? is_scale = null,
             float[]? mean = null, float[]? scale = null, long[]? input_size = null, float? cls_thresh = null,
             int? batch_num = null)
@@ -33,6 +36,23 @@ namespace PaddleOCR
             m_cls_thresh = config.cls_option.cls_thresh;
             m_input_size = config.cls_option.input_size;
         }
+
+        // To detect redundant calls
+        private bool m_disposed_value;
+        protected override void Dispose(bool disposing)
+        {
+            if (!m_disposed_value)
+            {
+                if (disposing)
+                {
+                }
+
+                m_disposed_value = true;
+            }
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
+
         public void predict(List<Mat> img_list, List<int> lables, List<float> scores)
         {
             int img_num = img_list.Count;

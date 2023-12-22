@@ -47,6 +47,21 @@ namespace PaddleOCR
             m_limit_side_len = config.det_option.limit_side_len;
         }
 
+        // To detect redundant calls
+        private bool m_disposed_value;
+        protected override void Dispose(bool disposing)
+        {
+            if (!m_disposed_value)
+            {
+                if (disposing)
+                {
+                }
+
+                m_disposed_value = true;
+            }
+            // Call base class implementation.
+            base.Dispose(disposing);
+        }
         public List<List<List<int>>> predict(Mat image) 
         {
             float ratio_h;
