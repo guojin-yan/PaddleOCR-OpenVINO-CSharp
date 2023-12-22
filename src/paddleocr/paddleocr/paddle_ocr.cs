@@ -121,6 +121,8 @@ namespace PaddleOCR
                 Mat crop_img = new Mat();
                 crop_img = PaddleOcrUtility.get_rotate_crop_image(img, ocr_result[j].box);
                 img_list.Add(crop_img);
+                //Cv2.ImShow("ss", crop_img);
+                //Cv2.WaitKey(0);
             }
             // cls
             if (cls)

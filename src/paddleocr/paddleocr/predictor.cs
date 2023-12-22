@@ -72,10 +72,7 @@ namespace PaddleOCR
             if (shape != null)
                 input_tensor.set_shape(new Shape(shape));
             input_tensor.set_data<float>(input_data);
-            DateTime start = DateTime.Now;
             m_infer_request.infer();
-            DateTime end = DateTime.Now;
-            Console.WriteLine("infer time: " + (end - start).TotalMilliseconds.ToString());
             if (m_model.get_outputs_size() > 1)
             {
                 Tensor output_tensor = m_infer_request.get_output_tensor(0);

@@ -116,9 +116,9 @@ namespace PaddleOCR
 
             List<List<List<int>>> boxes = PostProcessor.boxes_from_bitmap(pred_map, bit_map, m_det_db_box_thresh, m_det_db_unclip_ratio,
                 m_det_db_score_mode);
-            Console.WriteLine("-------------------:" + boxes.Count);
-            boxes = PostProcessor.filter_tag_det_res(boxes, ratio_h, ratio_w, image);
-            Console.WriteLine("-------------------:" + boxes.Count);
+            //Console.WriteLine("-------------------:" + boxes.Count);
+            boxes = PostProcessor.filter_tag_det_res(boxes, ratio_w, ratio_h, image);
+            //Console.WriteLine("-------------------:" + boxes.Count);
             return boxes;
         }
     }

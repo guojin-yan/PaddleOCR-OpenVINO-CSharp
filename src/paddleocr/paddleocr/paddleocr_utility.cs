@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenCvSharp;
+using OpenCvSharp.Extensions;
 using OpenVinoSharp.Extensions.Utility;
+using static System.Net.Mime.MediaTypeNames;
 using static OpenCvSharp.FileStorage;
+using Point = OpenCvSharp.Point;
+using Size = OpenCvSharp.Size;
 namespace PaddleOCR
 {
 
@@ -105,15 +110,35 @@ namespace PaddleOCR
                 rook_points[1] = new Point((int)(ocr_result[n].box[2][0]), (int)(ocr_result[n].box[2][1]));
                 rook_points[2] = new Point((int)(ocr_result[n].box[3][0]), (int)(ocr_result[n].box[3][1]));
                 rook_points[3] = new Point((int)(ocr_result[n].box[1][0]), (int)(ocr_result[n].box[1][1]));
-                for (int m = 0; m < ocr_result[n].box.Count; m++)
-                {
-
-                }
 
                 Point[][] ppt = { rook_points };
                 Cv2.Polylines(img_vis, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-
             }
+
+            System.Drawing.Image im =  BitmapConverter.ToBitmap(img_vis) as System.Drawing.Image;
+            Graphics graphics = Graphics.FromImage(im);
+            
+            SolidBrush brush = new SolidBrush(Color.Red);
+            for (int n = 0; n < ocr_result.Count; n++) 
+            {
+                int w = (ocr_result[n].box[1][1] - ocr_result[n].box[0][1]) / 3;
+                int h = (ocr_result[n].box[2][0] - ocr_result[n].box[0][0]) / 3;
+                int min = w < h ? w : h;
+                Font font = new Font("Arial", min);
+                float y = (float)ocr_result[n].box[0][1];
+                if (y > min * 1.5) 
+                {
+                    y -= (int)(min*1.5);
+                }
+                // 设置文本位置（左上角）
+                PointF point = new PointF(ocr_result[n].box[0][0], y);
+                string text = ocr_result[n].text;
+                // 将文本绘制到图像上
+                graphics.DrawString(text, font, brush, point);
+            }
+
+            img_vis = BitmapConverter.ToMat((Bitmap)im);
+
             return img_vis;
         }
 

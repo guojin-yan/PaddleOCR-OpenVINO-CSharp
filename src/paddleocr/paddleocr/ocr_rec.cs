@@ -97,7 +97,7 @@ namespace PaddleOCR
                 }
                 float[] input_data = PreProcess.permute_batch(norm_img_batch);
 
-                float[] predict_batch = infer(input_data, new long[] { batch_num, 3, 48, batch_width });
+                float[] predict_batch = infer(input_data, new long[] { batch_num, 3, m_input_size[2], batch_width });
 
                 for (int m = 0; m < m_rec_batch_num; m++)
                 {
