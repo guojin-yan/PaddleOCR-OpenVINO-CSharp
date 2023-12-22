@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
+    using static Org.BouncyCastle.Math.EC.ECCurve;
     using str_opt = RuntimeOption.StruTabRecOption;
     public class StruTabRec : Predictor
     {
@@ -29,7 +30,15 @@ namespace PaddleOCR
             string label_path_ = label_path ?? str_opt.label_path;
             m_table_post = new TablePostProcessor(label_path_, merge_no_span_structure);
         }
-
+        public StruTabRec(OcrConfig config) 
+            : base(config.table_rec_model_path, config.strutabrec_option.device, config.strutabrec_option.mean, config.strutabrec_option.scale,
+                config.strutabrec_option.input_size, config.strutabrec_option.is_scale, config.strutabrec_option.use_gpu)
+        {
+            m_batch_num = config.strutabrec_option.batch_num;
+            m_input_size = config.strutabrec_option.input_size;
+            string label_path_ = config.strutabrec_option.label_path;
+            m_table_post = new TablePostProcessor(label_path_, config.strutabrec_option.merge_no_span_structure);
+        }
         public void predict(List<Mat> img_list, List<List<string>> structure_html_tags, List<float> structure_scores, List<List<List<int>>> structure_boxes)
         {
             int img_num = img_list.Count;

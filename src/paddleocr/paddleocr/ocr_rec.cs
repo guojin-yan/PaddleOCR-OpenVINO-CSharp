@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
+    using static System.Formats.Asn1.AsnWriter;
     using rec_opt = RuntimeOption.RecOption;
     public class OcrRec : Predictor
     {
@@ -29,6 +30,18 @@ namespace PaddleOCR
             m_label_list.Add(" ");
             m_rec_batch_num = batch_num ?? rec_opt.batch_num;
             m_input_size = input_size ?? rec_opt.input_size;
+            m_rec_image_shape = new int[] { (int)m_input_size[1], (int)m_input_size[2], (int)m_input_size[3] };
+        }
+
+        public OcrRec(OcrConfig config)
+            : base(config.rec_model_path, config.rec_option.device, config.rec_option.mean, config.rec_option.scale,
+                   config.rec_option.input_size, config.rec_option.is_scale, config.rec_option.use_gpu)
+        {
+            m_label_list = PaddleOcrUtility.read_dict(config.rec_option.label_path);
+            m_label_list.Insert(0, "#");
+            m_label_list.Add(" ");
+            m_rec_batch_num = config.rec_option.batch_num;
+            m_input_size = config.rec_option.input_size;
             m_rec_image_shape = new int[] { (int)m_input_size[1], (int)m_input_size[2], (int)m_input_size[3] };
         }
 

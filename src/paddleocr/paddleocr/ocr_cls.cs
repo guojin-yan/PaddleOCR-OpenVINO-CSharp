@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
+    using static System.Formats.Asn1.AsnWriter;
     using cls_opt = RuntimeOption.ClsOption;
     public class OcrCls : Predictor
     {
@@ -25,6 +26,14 @@ namespace PaddleOCR
             m_input_size = input_size ?? cls_opt.input_size;
         }
 
+        public OcrCls(OcrConfig config)
+            : base(config.cls_model_path, config.cls_option.device, config.cls_option.mean, config.cls_option.scale,
+                   config.cls_option.input_size, config.cls_option.is_scale, config.cls_option.use_gpu)
+        {
+            m_cls_batch_num = config.cls_option.batch_num;
+            m_cls_thresh = config.cls_option.cls_thresh;
+            m_input_size = config.cls_option.input_size;
+        }
         public void predict(List<Mat> img_list, List<int> lables, List<float> scores)
         {
             int img_num = img_list.Count;

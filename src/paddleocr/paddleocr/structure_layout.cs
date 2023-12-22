@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PaddleOCR
 {
+    using static System.Formats.Asn1.AsnWriter;
     using str_opt = RuntimeOption.StruLayRecOption;
     public class StruLayRec : Predictor
     {
@@ -33,6 +34,20 @@ namespace PaddleOCR
             m_fpn_stride = fpn_stride ?? str_opt.fpn_stride;
              post_processor_ = new PicodetPostProcessor(label_path_, m_fpn_stride, m_score_threshold, m_nms_threshold);
         }
+
+        public StruLayRec(OcrConfig config) 
+            : base(config.strulay_rec_model_path, config.strulayrec_option.device, config.strulayrec_option.mean, config.strulayrec_option.scale,
+                config.strulayrec_option.input_size, config.strulayrec_option.is_scale, config.strulayrec_option.use_gpu)
+        {
+            m_batch_num = config.strulayrec_option.batch_num;
+            m_input_size = config.strulayrec_option.input_size;
+            string label_path_ = config.strulayrec_option.label_path;
+            m_score_threshold = config.strulayrec_option.score_threshold;
+            m_nms_threshold = config.strulayrec_option.nms_threshold;
+            m_fpn_stride = config.strulayrec_option.fpn_stride;
+            post_processor_ = new PicodetPostProcessor(label_path_, m_fpn_stride, m_score_threshold, m_nms_threshold);
+        }
+
         public List<StructurePredictResult> predict(Mat img, List<StructurePredictResult> result) 
         {
             Mat srcimg = new Mat();

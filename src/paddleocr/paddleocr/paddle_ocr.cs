@@ -12,6 +12,26 @@ namespace PaddleOCR
         protected bool flag_rec = false;
         protected bool flag_cls = false;
 
+        public OCRPredictor(OcrConfig config) 
+        {
+            if (config.det_model_path != null)
+            {
+                flag_det = true;
+                ocrDet = new OcrDet(config);
+            }
+
+            if (config.cls_model_path != null)
+            {
+                flag_cls = true;
+                ocrCls = new OcrCls(config);
+            }
+            if (config.rec_model_path != null)
+            {
+                flag_rec = true;
+                ocrRec = new OcrRec(config);
+            }
+        }
+
         public OCRPredictor(string det_model = null, string cls_model = null, string rec_model = null)
         {
             if (det_model != null)

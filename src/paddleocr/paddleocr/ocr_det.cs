@@ -8,6 +8,7 @@ using OpenVinoSharp;
 
 namespace PaddleOCR
 {
+    using static System.Formats.Asn1.AsnWriter;
     using det_opt = RuntimeOption.DetOption;
     public class OcrDet : Predictor
     {
@@ -17,6 +18,7 @@ namespace PaddleOCR
         private float m_det_db_unclip_ratio;
         string m_limit_type;
         int m_limit_side_len;
+
 
         public OcrDet(string det_model, string? device = null, bool? use_gpu = null, bool? is_scale = null, 
             float[]? mean = null, float[]? scale = null, float? db_thresh = null, float? db_box_thresh = null, 
@@ -31,6 +33,19 @@ namespace PaddleOCR
             m_det_db_unclip_ratio = db_unclip_ratio ?? det_opt.db_unclip_ratio;
             m_limit_type = limit_type ?? det_opt.limit_type;
             m_limit_side_len = limit_side_len ?? det_opt.limit_side_len;
+        }
+
+
+        public OcrDet(OcrConfig config)
+            : base(config.det_model_path, config.det_option.device, config.det_option.mean,
+                config.det_option.scale, config.det_option.input_size, true, config.det_option.use_gpu)
+        {
+            m_det_db_thresh = config.det_option.det_db_thresh;
+            m_det_db_box_thresh = config.det_option.det_db_box_thresh;
+            m_det_db_score_mode = config.det_option.db_score_mode;
+            m_det_db_unclip_ratio = config.det_option.db_unclip_ratio;
+            m_limit_type = config.det_option.limit_type;
+            m_limit_side_len = config.det_option.limit_side_len;
         }
 
         public List<List<List<int>>> predict(Mat image) 
