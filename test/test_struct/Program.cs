@@ -22,7 +22,7 @@ namespace test_struct
             //Cv2.ImShow("aa", image);
             //Cv2.WaitKey(0);
             string lay_model = "./../../../../../model/paddle/picodet_lcnet_x1_0_fgd_layout_cdla_infer/model.pdmodel";
-            string tab_model = "./../../../../../model/ir/ch_ppstructure_mobile_v2.0_SLANet_infer/model.xml";
+            string tab_model = "./../../../../../model/paddle/ch_ppstructure_mobile_v2.0_SLANet_infer/model.xml";
             string det_model = "./../../../../../model/paddle/ch_PP-OCRv4_det_infer/inference.pdmodel";
             string cls_model = "./../../../../../model/paddle/ch_ppocr_mobile_v2.0_cls_infer/inference.pdmodel";
             string rec_model = "./../../../../../model/paddle/ch_PP-OCRv4_rec_infer/inference.pdmodel";

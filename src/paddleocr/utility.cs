@@ -16,6 +16,35 @@ namespace OpenVinoSharp.Extensions.Utility
 {
     public static partial class Utility
     {
+
+        public static bool chech_path(string path) 
+        {
+            if (Directory.Exists(path))
+            {
+                Console.WriteLine(path + " 已存在");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine(path + "不存在");
+                return false;
+            }
+        }
+
+        public static bool chech_file(string path)
+        {
+            if (File.Exists(path))
+            {
+                Console.WriteLine(path + " 已存在");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine(path + "不存在");
+                return false;
+            }
+        }
+
         public static  T Clone<T>(T RealObject)
         {
             using (Stream objectStream = new MemoryStream())

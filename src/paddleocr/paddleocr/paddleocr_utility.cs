@@ -69,32 +69,32 @@ namespace PaddleOCR
             for (int i = 0; i < ocr_result.Count; i++)
             {
                 string mes = "";
-                mes += String.Format("{0} \t", i);
+                mes += String.Format("{0}  ", i);
                 // det
                 List<List<int>> boxes = ocr_result[i].box;
                 if (boxes.Count > 0)
                 {
-                    mes += "det boxes: [";
+                    mes += " det boxes:[";
                     for (int n = 0; n < boxes.Count; n++)
                     {
-                        mes += String.Format("[{0} , {1}]", boxes[n][0], boxes[n][1]);
+                        mes += String.Format("[{0}, {1}]", boxes[n][0], boxes[n][1]);
                         if (n != boxes.Count - 1)
                         {
                             mes += ',';
                         }
                     }
-                    mes += "] \t";
+                    mes += "]\t";
                 }
                 // rec
                 if (ocr_result[i].score != -1.0)
                 {
-                    mes += String.Format("rec text:  {0}\t  rec score: {1} \t", ocr_result[i].text, ocr_result[i].score);
+                    mes += String.Format(" rec text: {0}\t  rec score: {1} \t", ocr_result[i].text, ocr_result[i].score.ToString("0.00"));
                 }
 
                 // cls
                 if (ocr_result[i].cls_label != -1)
                 {
-                    mes += String.Format("cls label:  {0}\t  cls score: {1} \t", ocr_result[i].cls_label, ocr_result[i].cls_score);
+                    mes += String.Format(" cls label: {0}\t cls score: {1}", ocr_result[i].cls_label, ocr_result[i].cls_score.ToString("0.00"));
                 }
                 Console.WriteLine(mes);
             }
@@ -121,8 +121,8 @@ namespace PaddleOCR
             SolidBrush brush = new SolidBrush(Color.Red);
             for (int n = 0; n < ocr_result.Count; n++) 
             {
-                int w = (ocr_result[n].box[1][1] - ocr_result[n].box[0][1]) / 3;
-                int h = (ocr_result[n].box[2][0] - ocr_result[n].box[0][0]) / 3;
+                int w = (int)Math.Ceiling((double)(ocr_result[n].box[1][1] - ocr_result[n].box[0][1]) / 3.0) + 1;
+                int h = (int)Math.Ceiling((double)(ocr_result[n].box[2][0] - ocr_result[n].box[0][0]) / 3.0) + 1;
                 int min = w < h ? w : h;
                 Font font = new Font("Arial", min);
                 float y = (float)ocr_result[n].box[0][1];

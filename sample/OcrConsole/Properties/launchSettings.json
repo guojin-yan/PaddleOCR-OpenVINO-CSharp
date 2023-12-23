@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OcrConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "./../../../../../"
+    }
+  }
+}
