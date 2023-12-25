@@ -20,7 +20,7 @@ namespace OcrConsole
                 }
                 config.det_model_path = Path.Combine(base_path , "model/paddle/ch_PP-OCRv4_det_infer/inference.pdmodel");
                 config.cls_model_path = Path.Combine(base_path , "model/paddle/ch_ppocr_mobile_v2.0_cls_infer/inference.pdmodel");
-                config.rec_model_path = Path.Combine(base_path , "model/paddle/ch_PP-OCRv3_rec_infer/inference.pdmodel");
+                config.rec_model_path = Path.Combine(base_path , "model/paddle/ch_PP-OCRv4_rec_infer/inference.pdmodel");
                 image_path = Path.Combine(base_path + "/image/demo_1.jpg");
                 config.set_dict_path(base_path);
             } 
