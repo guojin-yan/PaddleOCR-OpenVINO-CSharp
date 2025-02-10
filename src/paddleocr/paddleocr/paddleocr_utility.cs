@@ -13,6 +13,7 @@ using static OpenCvSharp.FileStorage;
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
 using System.IO;
+using System.Xml.Serialization;
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
 
@@ -79,14 +80,17 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 
         public static T Clone<T>(T RealObject)
         {
-            using (Stream objectStream = new MemoryStream())
+            object rel;
+            using (MemoryStream ms = new MemoryStream())
             {
-                //利用 System.Runtime.Serialization序列化与反序列化完成引用对象的复制
-                IFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(objectStream, RealObject);
-                objectStream.Seek(0, SeekOrigin.Begin);
-                return (T)formatter.Deserialize(objectStream);
+                XmlSerializer xml = new XmlSerializer(typeof(T));
+                xml.Serialize(ms, RealObject);
+                ms.Seek(0, SeekOrigin.Begin);
+                rel = xml.Deserialize(ms);
+                ms.Close();
             }
+            return (T)rel;
+
         }
 
 
@@ -167,7 +171,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 int w = (int)Math.Ceiling((double)(ocr_result[n].box[1][1] - ocr_result[n].box[0][1]) / 3.0) + 1;
                 int h = (int)Math.Ceiling((double)(ocr_result[n].box[2][0] - ocr_result[n].box[0][0]) / 3.0) + 1;
                 int min = w < h ? w : h;
-                Font font = new Font("Arial", min);
+                System.Drawing.Font font = new System.Drawing.Font("Arial", min);
                 float y = (float)ocr_result[n].box[0][1];
                 if (y > min * 1.5) 
                 {
