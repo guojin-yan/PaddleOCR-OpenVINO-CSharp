@@ -8,6 +8,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
     public class OcrConfig 
     {
+
         // ocr det
         public class DetOption
         {
@@ -47,7 +48,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             public string label_path = "dict/ppocr_keys_v1.txt";
             public float[] mean = new float[] { 0.5f, 0.5f, 0.5f };
             public float[] scale = new float[] { 1 / 0.5f, 1 / 0.5f, 1 / 0.5f };
-            public long[] input_size = new long[] { 1, 3, 48, 320 };
+            public long[] input_size = new long[] { 1, 3, 48, 1024 };
             public bool is_scale = true;
             public bool use_gpu = false;
             public bool is_dynamic = true;
@@ -144,7 +145,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             public static int limit_side_len = 960;
             public static string limit_type = "max";
             public static string db_score_mode = "slow";
-            public static float db_unclip_ratio = 2.0f;
+            public static float db_unclip_ratio = 2.5f;
         }
 
         // Ocr cls
@@ -168,7 +169,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             public static string label_path = "dict/ppocr_keys_v1.txt";
             public static float[] mean = new float[] { 0.5f, 0.5f, 0.5f };
             public static float[] scale = new float[] { 1 / 0.5f, 1 / 0.5f, 1 / 0.5f };
-            public static long[] input_size = new long[] { 1, 3, 48, 320 };
+            public static long[] input_size = new long[] { 1, 3, 48, 1024 };
             public static bool is_scale = true;
             public static bool use_gpu = false;
             public static bool is_dynamic = true;

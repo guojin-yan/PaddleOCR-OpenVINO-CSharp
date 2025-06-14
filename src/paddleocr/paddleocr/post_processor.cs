@@ -300,7 +300,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 // start for unclip
                 RotatedRect points = unclip(box_for_unclip, det_db_unclip_ratio);
                 //Console.WriteLine("points.Size  {0}", points.Size);
-                if (points.Size.Height < 1.001 && points.Size.Width < 1.001)
+                if (points.Size.Height < 1.000 && points.Size.Width < 1.001)
                 {
                     continue;
                 }

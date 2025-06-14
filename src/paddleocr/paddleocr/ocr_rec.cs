@@ -72,6 +72,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 
             for (int beg_img_no = 0; beg_img_no < img_num; beg_img_no += m_rec_batch_num)
             {
+
                 int end_img_no = Math.Min(img_num, beg_img_no + m_rec_batch_num);
                 int batch_num = end_img_no - beg_img_no;
                 int imgH = m_rec_image_shape[1];
@@ -91,7 +92,10 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 {
                     Mat srcimg = new Mat();
                     img_list[indices[ino]].CopyTo(srcimg);
+
                     Mat resize_img = PreProcess.crnn_resize_img(srcimg, max_wh_ratio, m_rec_image_shape);
+                    //Cv2.ImShow("src", resize_img);
+                    //Cv2.WaitKey(0);
                     PreProcess.normalize(resize_img, m_mean, m_scale, m_is_scale);
                     norm_img_batch.Add(resize_img);
                     batch_width = Math.Max(resize_img.Cols, batch_width);
@@ -102,6 +106,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 float[] predict_batch = infer(input_data, new long[] { batch_num, 3, m_input_size[2], batch_width });
                 //DateTime end = DateTime.Now;
                 //Console.WriteLine("time: " + (end - start).TotalMilliseconds);
+
 
 
                 int batch_len = (int)Math.Round((double)(predict_batch.Length / batch_num / m_output_shape.Last<long>()));

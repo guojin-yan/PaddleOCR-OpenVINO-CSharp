@@ -27,6 +27,17 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             m_cls_batch_num = batch_num ?? cls_opt.batch_num;
             m_cls_thresh = cls_thresh ?? cls_opt.cls_thresh;
             m_input_size = input_size ?? cls_opt.input_size;
+            Dimension[] dims = m_input_shape.get_dimensions();
+            for (int i = 0; i < dims.Length; i++) 
+            {
+                if (!dims[i].is_dynamic()) 
+                {
+                    if (dims[i].get_max() != m_input_size[i]) 
+                    {
+                        m_input_size[i] = dims[i].get_max();
+                    }
+                }
+            }
         }
 
         public OcrCls(OcrConfig config)
@@ -36,6 +47,17 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             m_cls_batch_num = config.cls_option.batch_num;
             m_cls_thresh = config.cls_option.cls_thresh;
             m_input_size = config.cls_option.input_size;
+            Dimension[] dims = m_input_shape.get_dimensions();
+            for (int i = 0; i < dims.Length; i++)
+            {
+                if (!dims[i].is_dynamic())
+                {
+                    if (dims[i].get_max() != m_input_size[i])
+                    {
+                        m_input_size[i] = dims[i].get_max();
+                    }
+                }
+            }
         }
 
         // To detect redundant calls
@@ -79,6 +101,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                     }
                     norm_img_batch.Add(resize_img);
                 }
+          
 
                 float[] input_data = PreProcess.permute_batch(norm_img_batch);
 

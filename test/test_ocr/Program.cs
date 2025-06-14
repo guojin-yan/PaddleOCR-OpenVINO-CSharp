@@ -1,6 +1,7 @@
 ﻿using OpenCvSharp;
-using PaddleOCR;
+using OpenVinoSharp.Extensions.model.PaddleOCR;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection.Emit;
 
 namespace test_ocr
@@ -14,32 +15,43 @@ namespace test_ocr
 
         static void test_ocr()
         {
-            Mat image = Cv2.ImRead("./../../../../../image/demo_1.jpg");
+            string image_path = @"E:\Data\ocr\11.jpg";
+            Mat image = Cv2.ImRead(image_path);
 
-            string det_model = "./../../../../../model/paddle/ch_PP-OCRv4_det_infer/inference.pdmodel";
-            string cls_model = "./../../../../../model/paddle/ch_ppocr_mobile_v2.0_cls_infer/inference.pdmodel";
-            string rec_model = "./../../../../../model/paddle/ch_PP-OCRv4_rec_infer/inference.pdmodel";
+            //string det_model = @"E:\Model\ppocrv4\det\det.onnx";
+            //string cls_model = @"E:\Model\ppocrv4\cls\cls.onnx";
+            //string rec_model = @"E:\Model\ppocrv4\rec\rec.onnx";
+            string det_model = @"E:\Model\ppocrv5\det\det.onnx";
+            string cls_model = @"E:\Model\ppocrv5\cls\cls.onnx";
+            string rec_model = @"E:\Model\ocr\PP-OCRv5_mobile_rec_onnx.onnx";
+
+
+            RuntimeOption.RecOption.label_path = @"E:\Model\ppocrv5\ppocrv5_dict.txt";
+            //RuntimeOption.RecOption.label_path = @"E:\Model\ppocrv4\ppocr_keys_v1.txt";
+            //RuntimeOption.ClsOption.batch_num = 10;
+            //RuntimeOption.RecOption.batch_num = 10;
+
+            //RuntimeOption.RecOption.use_gpu = true;
+            //RuntimeOption.RecOption.device = "GPU";
+            //RuntimeOption.ClsOption.use_gpu = true;
+            //RuntimeOption.ClsOption.device = "GPU";
 
             OCRPredictor ocr = new OCRPredictor(det_model, cls_model, rec_model);
-            List<OCRPredictResult> ocr_result = ocr.ocr(image,true,true,true);
-            PaddleOcrUtility.print_result(ocr_result);
-            for (int n = 0; n < ocr_result.Count; n++)
+            List<OCRPredictResult> ocr_result = ocr.ocr(image, true, true, true);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < 10; ++i)
             {
-                Point[] rook_points = new Point[4];
-                rook_points[0] = new Point((int)(ocr_result[n].box[0][0]), (int)(ocr_result[n].box[0][1]));
-                rook_points[1] = new Point((int)(ocr_result[n].box[2][0]), (int)(ocr_result[n].box[2][1]));
-                rook_points[2] = new Point((int)(ocr_result[n].box[3][0]), (int)(ocr_result[n].box[3][1]));
-                rook_points[3] = new Point((int)(ocr_result[n].box[1][0]), (int)(ocr_result[n].box[1][1]));
-                for (int m = 0; m < ocr_result[n].box.Count; m++)
-                {
-
-                }
-
-                Point[][] ppt = { rook_points };
-                Cv2.Polylines(image, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-
+                ocr_result = ocr.ocr(image, true, true, true);
             }
-            Cv2.ImShow("result", image);
+
+            sw.Stop();
+            PaddleOcrUtility.print_result(ocr_result);
+            Mat result =  PaddleOcrUtility.visualize_bboxes(image, ocr_result);
+            Console.WriteLine("总推理时间： " + sw.ElapsedMilliseconds/10 + " ms");
+            Cv2.ImShow("result", result);
+            string result_path = Path.Combine(Path.GetDirectoryName(image_path), Path.GetFileNameWithoutExtension(image_path) + "_result.jpg");
+            Cv2.ImWrite(result_path, result);
             Cv2.WaitKey(0);
         }
 

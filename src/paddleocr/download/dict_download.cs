@@ -68,7 +68,11 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             /// <summary>
             /// 中文表格字典
             /// </summary>
-            table_structure_dict_ch
+            table_structure_dict_ch,
+            /// <summary>
+            /// PP-OCRv5字典
+            /// </summary>
+            ppocrv5_dict
 
         }
         public static async Task<string> Get(OCRDictsType type, string path = "./")
@@ -129,6 +133,10 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             else if (type == OCRDictsType.table_structure_dict_ch)
             {
                 url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/dict/table_structure_dict_ch.txt";
+            }
+            else if (type == OCRDictsType.ppocrv5_dict)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/dict/ppocrv5_dict.txt";
             }
             else
             {

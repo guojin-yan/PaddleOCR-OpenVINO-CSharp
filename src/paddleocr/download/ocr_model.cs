@@ -200,6 +200,22 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 if (rec) model.rec_model_path = await OCRRecModels.Get(OCRRecModelsType.devanagari_PP_OCRv3_rec);
                 model.dict_path = await OCRDicts.Get(OCRDictsType.devanagari_dict);
             }
+
+            else if (language == Language.PP_OCRv5_server)
+            {
+                if (det) model.det_model_path = await OCRDetModels.Get(OCRDetModelsType.PP_OCRv5_server_det);
+                if (cls) model.cls_model_path = await OCRClsModels.Get(OCRClsModelsType.PP_OCRv5_server_cls);
+                if (rec) model.rec_model_path = await OCRRecModels.Get(OCRRecModelsType.PP_OCRv5_server_rec);
+                model.dict_path = await OCRDicts.Get(OCRDictsType.ppocrv5_dict);
+            }
+            else if (language == Language.PP_OCRv5_mobile)
+            {
+                ; if (det) model.det_model_path = await OCRDetModels.Get(OCRDetModelsType.PP_OCRv5_mobile_det);
+                if (cls) model.cls_model_path = await OCRClsModels.Get(OCRClsModelsType.PP_OCRv5_mobile_cls);
+                if (rec) model.rec_model_path = await OCRRecModels.Get(OCRRecModelsType.PP_OCRv5_mobile_rec);
+                model.dict_path = await OCRDicts.Get(OCRDictsType.ppocrv5_dict);
+            }
+
             else
             {
                 throw new Exception("Model selection error!");
@@ -306,6 +322,14 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         /// 梵文字母 ppocr/utils/dict/devanagari_dict.txt
         /// </summary>
         devanagari_PP_OCRv3,
+        /// <summary>
+        /// PP_OCRv5 文字识别模型
+        /// </summary>
+        PP_OCRv5_server,
+        /// <summary>
+        /// PP_OCRv5 文字识别轻量化模型
+        /// </summary>
+        PP_OCRv5_mobile,
     }
 
 }

@@ -1,5 +1,5 @@
 ﻿using OpenCvSharp;
-using PaddleOCR;
+using OpenVinoSharp.Extensions.model.PaddleOCR;
 using Spire.Xls;
 using System.Net.Http;
 

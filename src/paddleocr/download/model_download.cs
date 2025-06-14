@@ -66,7 +66,16 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             /// <summary>
             /// 【最新】原始超轻量模型，支持多语言检测
             /// </summary>
-            ml_PP_OCRv3_det	
+            ml_PP_OCRv3_det,
+            /// <summary>
+            /// PP_OCRv5 文字识别模型
+            /// </summary>
+            PP_OCRv5_server_det,
+            /// <summary>
+            /// PP_OCRv5 文字识别轻量化模型
+            /// </summary>
+            PP_OCRv5_mobile_det
+
         }
 
         public static async Task<string> Get(OCRDetModelsType type, string path="./") 
@@ -124,6 +133,16 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             {
                 url = "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_slim_infer.tar";
             }
+            else if (type == OCRDetModelsType.PP_OCRv5_server_det)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_server_det_onnx.onnx";
+            }
+            else if (type == OCRDetModelsType.PP_OCRv5_mobile_det)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_mobile_det_onnx.onnx";
+            }
+
+            
             else
             {
                 throw new Exception("Model selection error!");
@@ -133,8 +152,19 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             string file_path = Path.Combine(path, file_name);
             if (!File.Exists(file_path))
                 _ = Download.download_file_async(url, file_path).Result;
-            Download.unzip(file_path, path);
-            return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
+            if (type == OCRDetModelsType.PP_OCRv5_server_det)
+            {
+                return Path.Combine(path, "PP-OCRv5_server_det_onnx.onnx");
+            }
+            else if (type == OCRDetModelsType.PP_OCRv5_mobile_det)
+            {
+                return Path.Combine(path, "PP-OCRv5_mobile_det_onnx.onnx");
+            }
+            else
+            {
+                Download.unzip(file_path, path);
+                return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
+            }
         }
     }
 
@@ -238,6 +268,14 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             /// 梵文字母 ppocr/utils/dict/devanagari_dict.txt
             /// </summary>
             devanagari_PP_OCRv3_rec,
+            /// <summary>
+            /// PP_OCRv5 文字识别模型
+            /// </summary>
+            PP_OCRv5_server_rec,
+            /// <summary>
+            /// PP_OCRv5 文字识别轻量化模型
+            /// </summary>
+            PP_OCRv5_mobile_rec
         }
 
         public static async Task<string> Get(OCRRecModelsType type, string path = "./")
@@ -339,6 +377,16 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             {
                 url = "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/devanagari_PP-OCRv3_rec_infer.tar";
             }
+            else if (type == OCRRecModelsType.PP_OCRv5_server_rec)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_server_rec_onnx.onnx";
+            }
+            else if (type == OCRRecModelsType.PP_OCRv5_mobile_rec)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_mobile_rec_onnx.onnx";
+            }
+
+
             else
             {
                 throw new Exception("Model selection error!");
@@ -348,8 +396,20 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             string file_path = Path.Combine(path, file_name);
             if(!File.Exists(file_path))
                 _ = Download.download_file_async(url, file_path).Result;
-            Download.unzip(file_path, path);
-            return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
+            if (type == OCRRecModelsType.PP_OCRv5_server_rec)
+            {
+                return Path.Combine(path, "PP-OCRv5_server_rec_onnx.onnx");
+            }
+            else if (type == OCRRecModelsType.PP_OCRv5_mobile_rec)
+            {
+                return Path.Combine(path, "PP-OCRv5_mobile_rec_onnx.onnx");
+            }
+            else
+            {
+                Download.unzip(file_path, path);
+                return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
+            }
+               
         }
     }
     public static class OCRClsModels
@@ -364,6 +424,14 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             /// 原始分类器模型，对检测到的文本行文字角度分类
             /// </summary>
             ch_ppocr_mobile_v2_cls,
+            /// <summary>
+            /// PP_OCRv5 文字识别模型
+            /// </summary>
+            PP_OCRv5_server_cls,
+            /// <summary>
+            /// PP_OCRv5 文字识别轻量化模型
+            /// </summary>
+            PP_OCRv5_mobile_cls
         }
 
         public static async Task<string> Get(OCRClsModelsType type, string path = "./")
@@ -377,6 +445,15 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             {
                 url = "https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar";
             }
+            else if (type == OCRClsModelsType.PP_OCRv5_server_cls)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_server_cls_onnx.onnx";
+            }
+            else if (type == OCRClsModelsType.PP_OCRv5_mobile_cls)
+            {
+                url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_mobile_cls_onnx.onnx";
+            }
+
             else
             {
                 throw new Exception("Model selection error!");
@@ -386,8 +463,19 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             string file_path = Path.Combine(path, file_name);
             if (!File.Exists(file_path))
                 _ = Download.download_file_async(url, file_path).Result;
-            Download.unzip(file_path, path);
-            return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
+            if (type == OCRClsModelsType.PP_OCRv5_server_cls)
+            {
+                return Path.Combine(path, "PP-OCRv5_server_cls_onnx.onnx");
+            }
+            else if (type == OCRClsModelsType.PP_OCRv5_mobile_cls)
+            {
+                return Path.Combine(path, "PP-OCRv5_mobile_cls_onnx.onnx");
+            }
+            else {
+                Download.unzip(file_path, path);
+                return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
+            }
+
         }
     }
 }

@@ -14,21 +14,21 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         StruLayRec layout_model;
         bool flag_table_model = false;
         bool flag_layout_model = false;
-        //public StructurePredictor(string layout_model_path = null, string table_model_path = null, string det_model = null, string rec_model = null, string cls_model = null)
-        //    : base(det_model, cls_model, rec_model)
-        //{
+        public StructurePredictor(string layout_model_path = null, string table_model_path = null, string det_model = null, string rec_model = null, string cls_model = null)
+            : base(det_model, cls_model, rec_model)
+        {
 
-        //    if (layout_model_path != null)
-        //    {
-        //        layout_model = new StruLayRec(layout_model_path);
-        //        flag_layout_model = true;
-        //    }
-        //    if (table_model_path != null)
-        //    {
-        //        table_model = new StruTabRec(table_model_path);
-        //        flag_table_model = true;
-        //    }
-        //}
+            if (layout_model_path != null)
+            {
+                layout_model = new StruLayRec(layout_model_path);
+                flag_layout_model = true;
+            }
+            if (table_model_path != null)
+            {
+                table_model = new StruTabRec(table_model_path);
+                flag_table_model = true;
+            }
+        }
         public StructurePredictor(OcrConfig config) :base(config) 
         {
             if (config.strulay_rec_model_path != null) 

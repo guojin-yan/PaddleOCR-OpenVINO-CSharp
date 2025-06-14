@@ -17,6 +17,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         protected CompiledModel m_compiled_model;
         protected InferRequest m_infer_request;
         protected Shape m_output_shape;
+        protected PartialShape m_input_shape;
 
         protected bool m_is_scale;
 
@@ -34,6 +35,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             m_core = new Core();
             m_core.set_property(device, Ov.cache_dir("./"));
             m_model = m_core.read_model(model_path);
+            m_input_shape = m_model.get_input().get_partial_shape();
             if (use_gpu && (!is_dynamic))
             {
                 if (input_size == null)

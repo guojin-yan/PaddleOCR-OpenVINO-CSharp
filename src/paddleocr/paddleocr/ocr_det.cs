@@ -68,6 +68,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             float ratio_h;
             float ratio_w;
             Mat input_img = PreProcess.resize_imgtype0(image, m_limit_type, m_limit_side_len, out ratio_h, out ratio_w);
+            //Cv2.ImShow("src1", input_img);
             input_img = PreProcess.normalize(input_img, m_mean, m_scale, m_is_scale);
             Mat cbuf_map = new Mat();
             Mat pred_map = new Mat();
@@ -84,9 +85,12 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 {
                     result_det_byte[i] = (byte)(result_det[i] * 255);
                 }
+
                 // 重构结果图像
-                Mat cbuf_map_t = new Mat(960, 960, MatType.CV_8UC1, result_det_byte);
-                Mat pred_map_t = new Mat(960, 960, MatType.CV_32F, result_det);
+                Mat cbuf_map_t = Mat.FromPixelData(960, 960, MatType.CV_8UC1, result_det_byte);
+                Mat pred_map_t = Mat.FromPixelData(960, 960, MatType.CV_32F, result_det);
+
+   
                 cbuf_map = new Mat(cbuf_map_t, roi);
                 pred_map = new Mat(pred_map_t, roi);
             }
@@ -94,6 +98,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             {
                 float[] input_data = PreProcess.permute(input_img);
                 float[] result_det = infer(input_data, new long[] { 1, 3, input_img.Rows, input_img.Cols });
+
                 // 将模型输出转为byte格式
                 byte[] result_det_byte = new byte[result_det.Length];
                 for (int i = 0; i < result_det.Length; i++)
@@ -101,19 +106,17 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                     result_det_byte[i] = (byte)(result_det[i] * 255);
                 }
                 // 重构结果图像
-                cbuf_map = new Mat(input_img.Rows, input_img.Cols, MatType.CV_8UC1, result_det_byte);
-                pred_map = new Mat(input_img.Rows, input_img.Cols, MatType.CV_32F, result_det);
+                cbuf_map = Mat.FromPixelData(input_img.Rows, input_img.Cols, MatType.CV_8UC1, result_det_byte);
+                pred_map = Mat.FromPixelData(input_img.Rows, input_img.Cols, MatType.CV_32F, result_det);
+
             }
      
             double threshold = m_det_db_thresh * 255;
             double maxvalue = 255;
             // 图像阈值处理
             Mat bit_map = new Mat();
-            //Cv2.ImShow("pred_map", pred_map);
-            //Cv2.WaitKey(0);
             Cv2.Threshold(cbuf_map, bit_map, threshold, maxvalue, ThresholdTypes.Binary);
-            //Cv2.ImShow("bit_map", bit_map);
-            //Cv2.WaitKey(0);
+
 
             List<List<List<int>>> boxes = PostProcessor.boxes_from_bitmap(pred_map, bit_map, m_det_db_box_thresh, m_det_db_unclip_ratio,
                 m_det_db_score_mode);
