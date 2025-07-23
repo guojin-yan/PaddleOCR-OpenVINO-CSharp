@@ -8,7 +8,7 @@
     <RootNamespace>OpenVinoSharp.Extensions.model.PaddleOCR</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>OpenVINO.CSharp.API.Extensions.PaddleOCR</PackageId>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Title>OpenVINO C# API deploy PaddleOCR</Title>
     <Authors>Guojin Yan</Authors>
     <Product>OpenVINO C# API</Product>
