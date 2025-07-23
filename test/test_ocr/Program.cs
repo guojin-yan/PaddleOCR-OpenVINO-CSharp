@@ -10,31 +10,48 @@ namespace test_ocr
     {
         static void Main(string[] args)
         {
-            test_ocr();
+            test_ocr_v5();
         }
 
-        static void test_ocr()
+        static void test_ocr_v5()
+        {
+            string image_path = @"E:\Data\ocr\16.jpg";
+            Mat image = Cv2.ImRead(image_path);
+
+            string det_model = @"E:\Model\ocr\PP-OCRv5_mobile_det_onnx.onnx";
+            string cls_model = @"E:\Model\ocr\PP-OCRv5_mobile_cls_onnx.onnx";
+            string rec_model = @"E:\Model\ocr\PP-OCRv5_mobile_rec_onnx.onnx";
+
+
+            RuntimeOption.RecOption.label_path = @"E:\Model\ocr\ppocrv5_dict.txt";
+
+            OCRPredictor ocr = new OCRPredictor(det_model, cls_model, rec_model);
+            List<OCRPredictResult> ocr_result = ocr.ocr(image, true, true, true);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            ocr_result = ocr.ocr(image, true, true, true);
+            sw.Stop();
+            PaddleOcrUtility.print_result(ocr_result);
+            Mat result =  PaddleOcrUtility.visualize_bboxes(image, ocr_result);
+            Console.WriteLine("总推理时间： " + sw.ElapsedMilliseconds + " ms");
+            Cv2.ImShow("result", result);
+            string result_path = Path.Combine(Path.GetDirectoryName(image_path), Path.GetFileNameWithoutExtension(image_path) + "_result.jpg");
+            Cv2.ImWrite(result_path, result);
+            Cv2.WaitKey(0);
+        }
+
+
+        static void test_ocrv5_time()
         {
             string image_path = @"E:\Data\ocr\11.jpg";
             Mat image = Cv2.ImRead(image_path);
 
-            //string det_model = @"E:\Model\ppocrv4\det\det.onnx";
-            //string cls_model = @"E:\Model\ppocrv4\cls\cls.onnx";
-            //string rec_model = @"E:\Model\ppocrv4\rec\rec.onnx";
-            string det_model = @"E:\Model\ppocrv5\det\det.onnx";
-            string cls_model = @"E:\Model\ppocrv5\cls\cls.onnx";
+            string det_model = @"E:\Model\ocr\PP-OCRv5_mobile_rec_onnx.onnx";
+            string cls_model = @"E:\Model\ocr\PP-OCRv5_mobile_cls_onnx.onnx";
             string rec_model = @"E:\Model\ocr\PP-OCRv5_mobile_rec_onnx.onnx";
 
 
-            RuntimeOption.RecOption.label_path = @"E:\Model\ppocrv5\ppocrv5_dict.txt";
-            //RuntimeOption.RecOption.label_path = @"E:\Model\ppocrv4\ppocr_keys_v1.txt";
-            //RuntimeOption.ClsOption.batch_num = 10;
-            //RuntimeOption.RecOption.batch_num = 10;
-
-            //RuntimeOption.RecOption.use_gpu = true;
-            //RuntimeOption.RecOption.device = "GPU";
-            //RuntimeOption.ClsOption.use_gpu = true;
-            //RuntimeOption.ClsOption.device = "GPU";
+            RuntimeOption.RecOption.label_path = @"E:\Model\ocr\ppocrv5_dict.txt";
 
             OCRPredictor ocr = new OCRPredictor(det_model, cls_model, rec_model);
             List<OCRPredictResult> ocr_result = ocr.ocr(image, true, true, true);
@@ -47,8 +64,8 @@ namespace test_ocr
 
             sw.Stop();
             PaddleOcrUtility.print_result(ocr_result);
-            Mat result =  PaddleOcrUtility.visualize_bboxes(image, ocr_result);
-            Console.WriteLine("总推理时间： " + sw.ElapsedMilliseconds/10 + " ms");
+            Mat result = PaddleOcrUtility.visualize_bboxes(image, ocr_result);
+            Console.WriteLine("总推理时间： " + sw.ElapsedMilliseconds / 10 + " ms");
             Cv2.ImShow("result", result);
             string result_path = Path.Combine(Path.GetDirectoryName(image_path), Path.GetFileNameWithoutExtension(image_path) + "_result.jpg");
             Cv2.ImWrite(result_path, result);

@@ -152,6 +152,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             Mat img_vis = srcimg.Clone(); ;
             for (int n = 0; n < ocr_result.Count; n++)
             {
+                if (ocr_result[n].score < 0.7) continue;
                 Point[] rook_points = new Point[4];
                 rook_points[0] = new Point((int)(ocr_result[n].box[0][0]), (int)(ocr_result[n].box[0][1]));
                 rook_points[1] = new Point((int)(ocr_result[n].box[2][0]), (int)(ocr_result[n].box[2][1]));
@@ -168,6 +169,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             SolidBrush brush = new SolidBrush(Color.Red);
             for (int n = 0; n < ocr_result.Count; n++) 
             {
+                if (ocr_result[n].score < 0.7) continue;
                 int w = (int)Math.Ceiling((double)(ocr_result[n].box[1][1] - ocr_result[n].box[0][1]) / 3.0) + 1;
                 int h = (int)Math.Ceiling((double)(ocr_result[n].box[2][0] - ocr_result[n].box[0][0]) / 3.0) + 1;
                 int min = w < h ? w : h;

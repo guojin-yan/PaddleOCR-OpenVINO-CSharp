@@ -129,7 +129,10 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             }
 
 
-
+            if (ocr_result.Count == 0) 
+            {
+                return ocr_result;
+            }
             // crop image
             List<Mat> img_list = new List<Mat>();
             for (int j = 0; j < ocr_result.Count; j++)
