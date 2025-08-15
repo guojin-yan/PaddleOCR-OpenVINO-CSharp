@@ -1,11 +1,6 @@
 ﻿using OpenCvSharp;
-using OpenVinoSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -28,11 +23,11 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             m_cls_thresh = cls_thresh ?? cls_opt.cls_thresh;
             m_input_size = input_size ?? cls_opt.input_size;
             Dimension[] dims = m_input_shape.get_dimensions();
-            for (int i = 0; i < dims.Length; i++) 
+            for (int i = 0; i < dims.Length; i++)
             {
-                if (!dims[i].is_dynamic()) 
+                if (!dims[i].is_dynamic())
                 {
-                    if (dims[i].get_max() != m_input_size[i]) 
+                    if (dims[i].get_max() != m_input_size[i])
                     {
                         m_input_size[i] = dims[i].get_max();
                     }
@@ -101,7 +96,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                     }
                     norm_img_batch.Add(resize_img);
                 }
-          
+
 
                 float[] input_data = PreProcess.permute_batch(norm_img_batch);
 

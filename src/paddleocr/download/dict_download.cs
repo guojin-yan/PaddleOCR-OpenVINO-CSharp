@@ -1,17 +1,13 @@
 ﻿using OpenVinoSharp.Extensions.utility;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRClsModels;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
     public class OCRDicts
     {
-        public enum OCRDictsType 
+        public enum OCRDictsType
         {
             /// <summary>
             /// 韩文识别

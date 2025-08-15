@@ -3,19 +3,14 @@ using OpenVinoSharp.Extensions.utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
-using static OpenCvSharp.XImgProc.CvXImgProc;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
 
-    public static class  Pipeline
+    public static class Pipeline
     {
-        public static async Task<OnlineOcr> GetOnlineOCR(Language language = Language.ch_PP_OCRv4, bool det = true, bool rec = true, bool cls = true) 
+        public static async Task<OnlineOcr> GetOnlineOCR(Language language = Language.ch_PP_OCRv4, bool det = true, bool rec = true, bool cls = true)
         {
             OcrModel model = await OcrModel.GetOnlineOcrModel(language, det, cls, rec);
             return new OnlineOcr(model);

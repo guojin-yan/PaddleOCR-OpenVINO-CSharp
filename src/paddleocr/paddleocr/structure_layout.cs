@@ -1,10 +1,6 @@
 ﻿using OpenCvSharp;
-using OpenVinoSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -21,7 +17,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         PicodetPostProcessor post_processor_;
         public StruLayRec(string layout_model, string? device = null, string? label_path = null, bool? use_gpu = null,
             bool? is_scale = null, float[]? mean = null, float[]? scale = null, long[]? input_size = null,
-            int? batch_num = null, double? score_threshold = null, double? nms_threshold = null, List<int>? fpn_stride =null)
+            int? batch_num = null, double? score_threshold = null, double? nms_threshold = null, List<int>? fpn_stride = null)
             : base(layout_model, device ?? str_opt.device, mean ?? str_opt.mean, scale ?? str_opt.scale,
            input_size ?? str_opt.input_size, is_scale ?? str_opt.is_scale, use_gpu ?? str_opt.use_gpu)
         {
@@ -31,10 +27,10 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             m_score_threshold = score_threshold ?? str_opt.score_threshold;
             m_nms_threshold = nms_threshold ?? str_opt.nms_threshold;
             m_fpn_stride = fpn_stride ?? str_opt.fpn_stride;
-             post_processor_ = new PicodetPostProcessor(label_path_, m_fpn_stride, m_score_threshold, m_nms_threshold);
+            post_processor_ = new PicodetPostProcessor(label_path_, m_fpn_stride, m_score_threshold, m_nms_threshold);
         }
 
-        public StruLayRec(OcrConfig config) 
+        public StruLayRec(OcrConfig config)
             : base(config.strulay_rec_model_path, config.strulayrec_option.device, config.strulayrec_option.mean, config.strulayrec_option.scale,
                 config.strulayrec_option.input_size, config.strulayrec_option.is_scale, config.strulayrec_option.use_gpu)
         {
@@ -63,12 +59,12 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             base.Dispose(disposing);
         }
 
-        public List<StructurePredictResult> predict(Mat img, List<StructurePredictResult> result) 
+        public List<StructurePredictResult> predict(Mat img, List<StructurePredictResult> result)
         {
             Mat srcimg = new Mat();
             img.CopyTo(srcimg);
             Mat resize_img = PreProcess.Resize(srcimg, 800, 608);
-            resize_img =  PreProcess.normalize(resize_img, this.m_mean, this.m_scale, this.m_is_scale);
+            resize_img = PreProcess.normalize(resize_img, this.m_mean, this.m_scale, this.m_is_scale);
 
             float[] input = PreProcess.permute(resize_img);
 
@@ -105,7 +101,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                     break;
                 }
             }
-            List<int> ori_shape = new List<int>{ srcimg.Rows, srcimg.Cols };
+            List<int> ori_shape = new List<int> { srcimg.Rows, srcimg.Cols };
             List<int> resize_shape = new List<int> { resize_img.Rows, resize_img.Cols };
             this.post_processor_.Run(result, out_tensor_list, ori_shape, resize_shape,
                                       reg_max);

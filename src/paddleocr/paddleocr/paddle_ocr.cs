@@ -13,7 +13,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         protected bool flag_rec = false;
         protected bool flag_cls = false;
 
-        public OCRPredictor(OcrConfig config) 
+        public OCRPredictor(OcrConfig config)
         {
             if (config.det_model_path != null)
             {
@@ -114,7 +114,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 }
                 ocr_result = this.det(img, ocr_result);
             }
-            else 
+            else
             {
                 OCRPredictResult re = new OCRPredictResult();
                 int x = img.Size().Width;
@@ -129,7 +129,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             }
 
 
-            if (ocr_result.Count == 0) 
+            if (ocr_result.Count == 0)
             {
                 return ocr_result;
             }
@@ -172,7 +172,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         public List<List<OCRPredictResult>> ocr(List<Mat> img_list, bool det, bool rec, bool cls)
         {
             List<List<OCRPredictResult>> results = new List<List<OCRPredictResult>>();
-            foreach (Mat img in img_list) 
+            foreach (Mat img in img_list)
             {
                 results.Add(ocr(img, det, rec, cls));
             }

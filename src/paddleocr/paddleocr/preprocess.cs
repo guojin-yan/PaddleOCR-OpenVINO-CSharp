@@ -1,11 +1,7 @@
 ﻿using OpenCvSharp;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Size = OpenCvSharp.Size;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
@@ -131,11 +127,11 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             resize_h = Math.Max((int)(Math.Round((float)(resize_h) / 32.0f) * 32), 32);
             resize_w = Math.Max((int)(Math.Round((float)(resize_w) / 32.0f) * 32), 32);
 
-            Mat resize_img = new Mat();
+            using var resize_img = new Mat();
             Cv2.Resize(img, resize_img, new Size(resize_w, resize_h));
             ratio_h = (float)(resize_h) / (float)(h);
             ratio_w = (float)(resize_w) / (float)(w);
-            return resize_img;
+            return resize_img.Clone();
         }
 
         public static Mat cls_resize_img(Mat img, List<int> cls_image_shape)
@@ -175,7 +171,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 resize_w = (int)(Math.Ceiling(imgH * ratio));
             Mat resize_img = new Mat();
             Cv2.Resize(img, resize_img, new Size(resize_w, imgH), 0.0f, 0.0f, InterpolationFlags.Linear);
-            Cv2.CopyMakeBorder(resize_img, resize_img, 0, 0, 0,(int)(imgW - resize_img.Cols), BorderTypes.Constant, new Scalar( 127, 127, 127));
+            Cv2.CopyMakeBorder(resize_img, resize_img, 0, 0, 0, (int)(imgW - resize_img.Cols), BorderTypes.Constant, new Scalar(127, 127, 127));
             return resize_img;
         }
 

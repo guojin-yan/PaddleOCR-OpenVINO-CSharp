@@ -1,12 +1,4 @@
-﻿using OpenCvSharp;
-using OpenCvSharp.Dnn;
-using OpenVinoSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -29,8 +21,8 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 
         private bool m_disposed_value;
 
-        public Predictor(string model_path, string device, float[] mean, float[] scale, long[] input_size, 
-            bool is_scale=true, bool use_gpu=false, bool is_dynamic = true) 
+        public Predictor(string model_path, string device, float[] mean, float[] scale, long[] input_size,
+            bool is_scale = true, bool use_gpu = false, bool is_dynamic = true)
         {
             m_core = new Core();
             m_core.set_property(device, Ov.cache_dir("./"));
@@ -72,8 +64,9 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             }
         }
 
-        protected float[] infer(float[] input_data, long[] shape=null) {
-           Tensor input_tensor = m_infer_request.get_input_tensor();
+        protected float[] infer(float[] input_data, long[] shape = null)
+        {
+            Tensor input_tensor = m_infer_request.get_input_tensor();
             if (shape != null)
                 input_tensor.set_shape(new Shape(shape));
             input_tensor.set_data<float>(input_data);

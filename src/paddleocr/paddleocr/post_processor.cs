@@ -1,12 +1,8 @@
-﻿using iTextSharp.text.pdf.parser.clipper;
+﻿using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
 using OpenCvSharp;
-using OpenVinoSharp.Extensions.model.PaddleOCR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -45,11 +41,11 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                               (box[i][1] - box[(i + 1) % pts_num][1]) *
                                   (box[i][1] - box[(i + 1) % pts_num][1]));
             }
-            
+
             area = Math.Abs((float)(area / 2.0));
 
             distance = area * unclip_ratio / dist;
-            
+
         }
 
         static RotatedRect unclip(List<List<float>> box, float unclip_ratio)
@@ -57,7 +53,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             float distance = 1.0f;
 
             get_contour_area(box, unclip_ratio, out distance);
-            
+
 
             ClipperOffset offset = new ClipperOffset();
 
@@ -65,7 +61,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             new IntPoint((int)box[1][0], (int)box[1][1]), new IntPoint((int)box[2][0], (int)box[2][1]),
             new IntPoint((int)box[3][0], (int)box[3][1])};
 
-            offset.AddPath(path, JoinType.jtRound, EndType.etClosedPolygon);
+            offset.AddPath(path, JoinType.ROUND, EndType.CLOSED_POLYGON);
             List<List<IntPoint>> paths = new List<List<IntPoint>>();
             offset.Execute(ref paths, distance);
             List<Point2f> points = new List<Point2f>();
@@ -80,7 +76,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             RotatedRect res;
             if (points.Count() <= 0)
             {
-                
+
                 res = new RotatedRect(new Point2f(0, 0), new Size2f(1, 1), 0);
             }
             else
@@ -104,7 +100,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 rect.Add(leftmost[1]);
                 rect.Add(leftmost[0]);
             }
-            else 
+            else
             {
                 rect.Add(leftmost[0]);
                 rect.Add(leftmost[1]);
@@ -115,7 +111,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 rect.Add(rightmost[1]);
                 rect.Add(rightmost[0]);
             }
-            else 
+            else
             {
                 rect.Add(rightmost[0]);
                 rect.Add(rightmost[1]);
@@ -271,12 +267,12 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 
             for (int _i = 0; _i < num_contours; _i++)
             {
-  
+
                 if (contours[_i].Length <= 2)
                 {
                     continue;
                 }
-                
+
                 float ssid;
                 RotatedRect box = Cv2.MinAreaRect(contours[_i]);
                 var array = get_mini_boxes(box, out ssid);
@@ -326,7 +322,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 boxes.Add(intcliparray);
 
             } // end for
-            
+
             return boxes;
         }
 
@@ -481,7 +477,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         private double nms_threshold_ = 0.5;
         private int num_class_ = 5;
         public List<int> fpn_stride_ = new List<int> { 8, 16, 32, 64 };
-        public PicodetPostProcessor(string label_path, List<int> fpn_stride,double score_threshold = 0.4, double nms_threshold = 0.5)
+        public PicodetPostProcessor(string label_path, List<int> fpn_stride, double score_threshold = 0.4, double nms_threshold = 0.5)
         {
             this.label_list_ = PaddleOcrUtility.read_dict(label_path);
             this.score_threshold_ = score_threshold;
@@ -590,7 +586,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         {
 
             input_boxes.Sort((x, y) => x.confidence.CompareTo(y.confidence));
-            List<int> picked = new List<int>(); 
+            List<int> picked = new List<int>();
             for (int i = 0; i < input_boxes.Count; ++i) picked.Add(1);
             for (int i = 0; i < input_boxes.Count; ++i)
             {
