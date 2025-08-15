@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
-    public class OcrConfig 
+    public class OcrConfig
     {
 
         // ocr det
@@ -92,7 +88,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         public string table_rec_model_path = null;
         public string strulay_rec_model_path = null;
 
-        public OcrConfig() 
+        public OcrConfig()
         {
             det_option = new DetOption();
             cls_option = new ClsOption();
@@ -101,7 +97,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             strulayrec_option = new StruLayRecOption();
         }
 
-        public OcrConfig(OcrModel model) 
+        public OcrConfig(OcrModel model)
         {
             det_option = new DetOption();
             cls_option = new ClsOption();
@@ -109,7 +105,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             strutabrec_option = new StruTabRecOption();
             strulayrec_option = new StruLayRecOption();
             det_model_path = model.det_model_path;
-            cls_model_path= model.cls_model_path;
+            cls_model_path = model.cls_model_path;
             rec_model_path = model.rec_model_path;
             rec_option.label_path = model.dict_path;
         }
@@ -198,9 +194,9 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             public static bool is_scale = true;
             public static bool use_gpu = false;
             public static int batch_num = 1;
-            public static double score_threshold = 0.4; 
+            public static double score_threshold = 0.4;
             public static double nms_threshold = 0.5;
-            public static  List<int> fpn_stride = new List<int>(new int[] { 8, 16, 32, 64 });
+            public static List<int> fpn_stride = new List<int>(new int[] { 8, 16, 32, 64 });
 
         }
 

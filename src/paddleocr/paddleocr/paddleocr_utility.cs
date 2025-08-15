@@ -1,19 +1,13 @@
-﻿using System;
+﻿using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
-using static System.Net.Mime.MediaTypeNames;
-using static OpenCvSharp.FileStorage;
+using System.Xml.Serialization;
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
-using System.IO;
-using System.Xml.Serialization;
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
 
@@ -163,11 +157,11 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 Cv2.Polylines(img_vis, ppt, true, new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
             }
 
-            System.Drawing.Image im =  BitmapConverter.ToBitmap(img_vis) as System.Drawing.Image;
+            System.Drawing.Image im = BitmapConverter.ToBitmap(img_vis) as System.Drawing.Image;
             Graphics graphics = Graphics.FromImage(im);
-            
+
             SolidBrush brush = new SolidBrush(Color.Red);
-            for (int n = 0; n < ocr_result.Count; n++) 
+            for (int n = 0; n < ocr_result.Count; n++)
             {
                 if (ocr_result[n].score < 0.7) continue;
                 int w = (int)Math.Ceiling((double)(ocr_result[n].box[1][1] - ocr_result[n].box[0][1]) / 3.0) + 1;
@@ -175,9 +169,9 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 int min = w < h ? w : h;
                 System.Drawing.Font font = new System.Drawing.Font("Arial", min);
                 float y = (float)ocr_result[n].box[0][1];
-                if (y > min * 1.5) 
+                if (y > min * 1.5)
                 {
-                    y -= (int)(min*1.5);
+                    y -= (int)(min * 1.5);
                 }
                 // 设置文本位置（左上角）
                 PointF point = new PointF(ocr_result[n].box[0][0], y);
@@ -463,8 +457,8 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             int length = src.Count;
             List<float> dst = new List<float>(length);
             for (int i = 0; i < length; ++i) dst.Add(0.0f);
-            float alpha = (float)(src.GetRange(0,length).Max());
-            float denominator=0;
+            float alpha = (float)(src.GetRange(0, length).Max());
+            float denominator = 0;
 
             for (int i = 0; i < length; ++i)
             {

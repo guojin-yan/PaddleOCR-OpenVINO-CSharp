@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenVinoSharp.Extensions.utility;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using iTextSharp.text.pdf.parser;
-using OpenVinoSharp.Extensions.utility;
-using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRDetModels;
 using Path = System.IO.Path;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
     public static class OCRDetModels
     {
-        public enum OCRDetModelsType 
+        public enum OCRDetModelsType
         {
             /// <summary>
             /// 【最新】原始超轻量模型，支持中英文、多语种文本检测
@@ -78,7 +73,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 
         }
 
-        public static async Task<string> Get(OCRDetModelsType type, string path="./") 
+        public static async Task<string> Get(OCRDetModelsType type, string path = "./")
         {
             string url = "";
             if (type == OCRDetModelsType.ch_PP_OCRv4_det)
@@ -142,7 +137,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 url = "https://github.com/guojin-yan/PaddleOCR-OpenVINO-CSharp/releases/download/Modelv5/PP-OCRv5_mobile_det_onnx.onnx";
             }
 
-            
+
             else
             {
                 throw new Exception("Model selection error!");
@@ -394,7 +389,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             Uri uri = new Uri(url);
             string file_name = System.IO.Path.GetFileName(uri.LocalPath);
             string file_path = Path.Combine(path, file_name);
-            if(!File.Exists(file_path))
+            if (!File.Exists(file_path))
                 _ = Download.download_file_async(url, file_path).Result;
             if (type == OCRRecModelsType.PP_OCRv5_server_rec)
             {
@@ -409,7 +404,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 Download.unzip(file_path, path);
                 return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
             }
-               
+
         }
     }
     public static class OCRClsModels
@@ -471,7 +466,8 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             {
                 return Path.Combine(path, "PP-OCRv5_mobile_cls_onnx.onnx");
             }
-            else {
+            else
+            {
                 Download.unzip(file_path, path);
                 return Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(uri.LocalPath), "inference.pdmodel");
             }

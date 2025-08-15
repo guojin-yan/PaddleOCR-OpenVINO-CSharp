@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -29,9 +26,9 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 flag_table_model = true;
             }
         }
-        public StructurePredictor(OcrConfig config) :base(config) 
+        public StructurePredictor(OcrConfig config) : base(config)
         {
-            if (config.strulay_rec_model_path != null) 
+            if (config.strulay_rec_model_path != null)
             {
                 layout_model = new StruLayRec(config);
                 flag_layout_model = true;
@@ -42,17 +39,17 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 flag_table_model = true;
             }
         }
-        
+
         public List<StructurePredictResult> structure(Mat srcimg, bool layout, bool table, bool ocr)
         {
             Mat img = new Mat();
             srcimg.CopyTo(img);
 
-            List<StructurePredictResult> structure_results = new List<StructurePredictResult> ();
+            List<StructurePredictResult> structure_results = new List<StructurePredictResult>();
 
             if (layout)
             {
-                if (!flag_layout_model) 
+                if (!flag_layout_model)
                 {
                     throw new Exception("The StruLayRec is not init!");
                 }
@@ -60,14 +57,14 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             }
             else
             {
-                StructurePredictResult res =new StructurePredictResult();
+                StructurePredictResult res = new StructurePredictResult();
                 res.type = "table";
                 res.box = new List<float>() { 0.0f, 0.0f, 0.0f, 0.0f };
                 res.box[2] = img.Cols;
                 res.box[3] = img.Rows;
                 structure_results.Add(res);
             }
-            Mat roi_img =new Mat();
+            Mat roi_img = new Mat();
             for (int i = 0; i < structure_results.Count; i++)
             {
                 // crop image
@@ -94,7 +91,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
 
         public List<StructurePredictResult> layout(Mat img, List<StructurePredictResult> structure_result)
         {
-           return layout_model.predict(img, structure_result);
+            return layout_model.predict(img, structure_result);
         }
 
 

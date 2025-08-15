@@ -1,10 +1,5 @@
-﻿using System;
+﻿using OpenCvSharp;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenCvSharp;
-using OpenVinoSharp;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -63,7 +58,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             // Call base class implementation.
             base.Dispose(disposing);
         }
-        public List<List<List<int>>> predict(Mat image) 
+        public List<List<List<int>>> predict(Mat image)
         {
             float ratio_h;
             float ratio_w;
@@ -72,7 +67,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             input_img = PreProcess.normalize(input_img, m_mean, m_scale, m_is_scale);
             Mat cbuf_map = new Mat();
             Mat pred_map = new Mat();
-            if (m_use_gpu) 
+            if (m_use_gpu)
             {
                 Mat max_image = Mat.Zeros(new OpenCvSharp.Size(960, 960), MatType.CV_32FC3);
                 Rect roi = new Rect(0, 0, image.Cols, image.Rows);
@@ -90,7 +85,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 Mat cbuf_map_t = Mat.FromPixelData(960, 960, MatType.CV_8UC1, result_det_byte);
                 Mat pred_map_t = Mat.FromPixelData(960, 960, MatType.CV_32F, result_det);
 
-   
+
                 cbuf_map = new Mat(cbuf_map_t, roi);
                 pred_map = new Mat(pred_map_t, roi);
             }
@@ -110,7 +105,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 pred_map = Mat.FromPixelData(input_img.Rows, input_img.Cols, MatType.CV_32F, result_det);
 
             }
-     
+
             double threshold = m_det_db_thresh * 255;
             double maxvalue = 255;
             // 图像阈值处理

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
-using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRDetModels;
 using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRClsModels;
-using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRRecModels;
+using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRDetModels;
 using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRDicts;
+using static OpenVinoSharp.Extensions.model.PaddleOCR.OCRRecModels;
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
     public class OcrModel
@@ -28,15 +24,15 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
         }
 
         public static async Task<OcrModel> GetOnlineOcrModel(Language language = Language.ch_PP_OCRv4,
-            bool det = true, bool cls = true, bool rec = true) 
+            bool det = true, bool cls = true, bool rec = true)
         {
             OcrModel model = new OcrModel();
 
             if (language == Language.ch_PP_OCRv4)
             {
-                if(det) model.det_model_path = await OCRDetModels.Get(OCRDetModelsType.ch_PP_OCRv4_det);
-                if(cls) model.cls_model_path = await OCRClsModels.Get(OCRClsModelsType.ch_ppocr_mobile_v2_cls);
-                if(rec) model.rec_model_path = await OCRRecModels.Get(OCRRecModelsType.ch_PP_OCRv4_rec);
+                if (det) model.det_model_path = await OCRDetModels.Get(OCRDetModelsType.ch_PP_OCRv4_det);
+                if (cls) model.cls_model_path = await OCRClsModels.Get(OCRClsModelsType.ch_ppocr_mobile_v2_cls);
+                if (rec) model.rec_model_path = await OCRRecModels.Get(OCRRecModelsType.ch_PP_OCRv4_rec);
                 model.dict_path = await OCRDicts.Get(OCRDictsType.ppocr_keys_v1);
             }
             else if (language == Language.ch_PP_OCRv4_server)

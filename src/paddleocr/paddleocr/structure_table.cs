@@ -1,11 +1,6 @@
 ﻿using OpenCvSharp;
-using OpenVinoSharp;
-using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenVinoSharp.Extensions.model.PaddleOCR
 {
@@ -29,7 +24,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
             string label_path_ = label_path ?? str_opt.label_path;
             m_table_post = new TablePostProcessor(label_path_, merge_no_span_structure);
         }
-        public StruTabRec(OcrConfig config) 
+        public StruTabRec(OcrConfig config)
             : base(config.table_rec_model_path, config.strutabrec_option.device, config.strutabrec_option.mean, config.strutabrec_option.scale,
                 config.strutabrec_option.input_size, config.strutabrec_option.is_scale, config.strutabrec_option.use_gpu)
         {
@@ -107,7 +102,7 @@ namespace OpenVinoSharp.Extensions.model.PaddleOCR
                 List<List<string>> structure_html_tag_batch = new List<List<string>>();
                 List<float> structure_score_batch = new List<float>();
                 List<List<List<int>>> structure_boxes_batch = new List<List<List<int>>>();
-                m_table_post.Run(new List<float>(loc_preds), new List<float>(structure_probs), structure_score_batch,predict_shape0,
+                m_table_post.Run(new List<float>(loc_preds), new List<float>(structure_probs), structure_score_batch, predict_shape0,
                     predict_shape1, structure_html_tag_batch, structure_boxes_batch, width_list, height_list);
                 for (int m = 0; m < predict_shape0[0]; m++)
                 {
